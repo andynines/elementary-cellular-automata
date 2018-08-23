@@ -1,6 +1,5 @@
 # Elementary Cellular Automata
-Simulator for the elementary cellular automata
-This is still very much a work in progress!
+This is a simulator for the elementary cellular automata. It is still very much a work in progress!
 ```
 ........................................#.......................................
 .......................................#.#......................................
