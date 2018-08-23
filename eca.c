@@ -51,18 +51,19 @@ bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
 
 int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex) {
     // Return integer in [0, 7] representing neighborhood of the cell at cellIndex
-    int neighborIndex;
-    bool currentCellState;
     int bitMask;
     int cellNeighborhood;
+    int neighborIndex;
     bool wrapOccurred;
+    bool currentCellState;
 
-    CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex);
+    bool wrap(int* n, int min, int max);
     bool getCellState(CellBlock* intlBlockPtr, int cellIndex);
-    // TODO: Clean up this logic
-    --cellIndex;
-    bitMask = 4; // set to 000 ... 000 100
+
+    --cellIndex; // Begin with left neighbor of desired cell
+    bitMask = 4; // Set to 000 ... 000 100
     cellNeighborhood = 0;
+
     for (neighborIndex = 0; neighborIndex < 3; ++neighborIndex) {
         wrapOccurred = wrap(&cellIndex, 0, (simPtr->habitatSize) - 1);
         if (wrapOccurred) {
@@ -80,7 +81,6 @@ int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex) {
         } else {
             currentCellState = getCellState(simPtr->genArr[genIndex].blockArr, cellIndex);
         }
-        
         if (currentCellState) {
             cellNeighborhood |= bitMask;
         }
@@ -93,7 +93,7 @@ int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex) {
 
 
 
-bool determineEvoState(int rule, int cellNeighborhood) { // TODO: Add caching
+bool determineEvoState(int rule, int cellNeighborhood) {
     // Given a cell's neighborhood, determine its state in the next generation
     int bitMask;
     bool cellState;
