@@ -26,7 +26,6 @@ MIT License
 int main(void) {
 
     Simulation* testSimPtr;
-    int iterIndex;
     // TODO: Read in variables as cmd line arguments
     testSimPtr = createSim(RULE, HABITAT_SIZE, BUFFER_SIZE, BOUNDARY_CODE, INIT_CODE);
     
