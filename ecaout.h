@@ -19,8 +19,8 @@ MIT License
 // Available output characters
 
 typedef enum {
-    DEAD_CELL = '.',
-    ALIVE_CELL = '#'
+    DEAD_CELL = '-',
+    ALIVE_CELL = '0'
 } OutChar;
 
 

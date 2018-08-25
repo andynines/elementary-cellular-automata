@@ -16,6 +16,13 @@ MIT License
 
 
 
+// Constants
+
+#define blockBytes (sizeof(CellBlock))
+#define blockBits (blockBytes * 8)
+
+
+
 // Data types
 
 typedef enum {
@@ -42,8 +49,6 @@ typedef enum {
 } BoundaryCode;
 
 typedef unsigned short int CellBlock;
-static const int blockBytes = sizeof(CellBlock);
-static const int blockBits = blockBytes * 8;
 
 typedef struct {
     CellBlock* blockArr;

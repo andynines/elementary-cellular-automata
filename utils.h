@@ -18,11 +18,13 @@ MIT License
 
 // Function declarations
 
-bool wrap(int* n, int min, int max);
-
 bool binomProb(double p);
 
 int gcd(int a, int b);
+
+int min(int a, int b);
+
+bool wrap(int* n, int min, int max);
 
 
 

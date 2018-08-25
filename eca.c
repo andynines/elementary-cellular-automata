@@ -49,8 +49,19 @@ bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
 
 
 
+void copyGen(CellBlock* source, CellBlock* target, int blockReq) {
+    
+    int blockIndex;
+
+    for (blockIndex = 0; blockIndex < blockReq; ++blockIndex) {
+        target[blockIndex] = source[blockIndex];
+    }
+}
+
+
+
 int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex) {
-    // Return integer in [0, 7] representing neighborhood of the cell at cellIndex
+    // Return integer in [0,7] representing neighborhood of the cell at cellIndex
     int bitMask;
     int cellNeighborhood;
     int neighborIndex;
@@ -132,36 +143,35 @@ void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state) {
 void iterateSim(Simulation* simPtr, int iterations) {
     // Calculate the next state of a simulation and manage the buffer
     int maxGenIndex;
-    int iterIndex;
-    int genIndex;
     int targetGenIndex;
+    int genIndex;
     int cellIndex;
     int cellNeighborhood;
     bool cellState;
 
+    int min(int a, int b);
+    void copyGen(CellBlock* source, CellBlock* target, int blockReq);
     int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex);
     bool determineEvoState(int rule, int cellNeighborhood);
     void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
 
     maxGenIndex = (simPtr->genBufferSize) - 1;
 
-    for (iterIndex = 0; iterIndex < iterations; ++iterIndex) {
-        if ((simPtr->age) >= maxGenIndex) {
-            // If the buffer is full, shift each generation back and overwrite the oldest
+    for (; iterations > 0; --iterations) {
+        targetGenIndex = min((simPtr->age) + 1, maxGenIndex);
+        // If buffer is full, shift every gen back and truncate the oldest
+        if ((simPtr->age) > maxGenIndex) {
             for (genIndex = 0; genIndex < maxGenIndex; ++genIndex) {
-                simPtr->genArr[genIndex] = simPtr->genArr[genIndex + 1];
+                copyGen(simPtr->genArr[genIndex + 1].blockArr,
+                        simPtr->genArr[genIndex].blockArr,
+                        simPtr->blockReq);
             }
-            targetGenIndex = maxGenIndex;
-        } else {
-            targetGenIndex = (simPtr->age) + 1;
         }
-
         for (cellIndex = 0; cellIndex < (simPtr->habitatSize); ++cellIndex) {
             cellNeighborhood = extractCellNeighborhood(simPtr, (targetGenIndex - 1), cellIndex);
             cellState = determineEvoState(simPtr->rule, cellNeighborhood);
             setCell(simPtr->genArr[targetGenIndex].blockArr, cellIndex, cellState);
         }
-
         ++(simPtr->age);
     }
 }
@@ -236,7 +246,7 @@ void orderlyFill(Simulation* simPtr, int genIndex, double proportion) {
 
     habitatSize = simPtr->habitatSize;
     aliveReq = habitatSize * proportion;
-    ratioGcd = gcd(habitatSize - (habitatSize % 4), aliveReq); // TODO: eliminate filthy hack
+    ratioGcd = gcd(habitatSize - (habitatSize % 4), aliveReq);
     clusterSize = habitatSize / ratioGcd;
     aliveClusterSize = aliveReq / ratioGcd;
 

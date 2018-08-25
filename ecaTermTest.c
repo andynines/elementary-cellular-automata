@@ -29,7 +29,7 @@ int main(void) {
     int iterIndex;
     // TODO: Read in variables as cmd line arguments
     testSimPtr = createSim(RULE, HABITAT_SIZE, BUFFER_SIZE, BOUNDARY_CODE, INIT_CODE);
-
+    
     iterateSim(testSimPtr, BUFFER_SIZE - 1);
 
     simOut(testSimPtr);

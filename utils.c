@@ -15,21 +15,6 @@ MIT License
 
 // Utility methods
 
-bool wrap(int* n, int nMin, int nMax) {
-    // Keep a number within a specified range; return true if wrap occurs
-    if (*n < nMin) {
-        *n = nMax;
-        return true;
-    } else if (*n > nMax) {
-        *n = nMin;
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-
 bool binomProb(double p) {
     // Returns one-trial experimental outcome of a binomial probability
     double zTest;
@@ -52,4 +37,30 @@ int gcd(int a, int b) {
     }
 
     return a;
+}
+
+
+
+int min(int a, int b) {
+    // Find the smaller of two numbers
+    if (a < b) {
+        return a;
+    } else {
+        return b;
+    }
+}
+
+
+
+bool wrap(int* n, int nMin, int nMax) {
+    // Keep a number within a specified range; return true if wrap occurs
+    if (*n < nMin) {
+        *n = nMax;
+        return true;
+    } else if (*n > nMax) {
+        *n = nMin;
+        return true;
+    } else {
+        return false;
+    }
 }

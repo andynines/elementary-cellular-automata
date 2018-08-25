@@ -24,8 +24,8 @@ void genOut(Simulation* simPtr, int genIndex) {
     bool currentCellState;
     OutChar cellOut;
 
-    currentBlockPtr = &(simPtr->genArr[genIndex].blockArr[0]);
-    bitMask = 1 << (blockBits - 1);
+    currentBlockPtr = simPtr->genArr[genIndex].blockArr;
+    bitMask = 1 << (blockBits - 1); // Set to 100 000 ... 000
 
     for (cellIndex = 0; cellIndex < (simPtr->habitatSize); ++cellIndex) {
         currentCellState = *currentBlockPtr & bitMask;
@@ -34,7 +34,7 @@ void genOut(Simulation* simPtr, int genIndex) {
         } else {
             cellOut = DEAD_CELL;
         }
-        printf("%c", cellOut);
+        putchar(cellOut);
         bitMask >>= 1;
         if (!bitMask) {
             bitMask = 1 << (blockBits - 1);
@@ -42,7 +42,7 @@ void genOut(Simulation* simPtr, int genIndex) {
         }
     }
 
-    printf("\n");
+    putchar('\n');
 }
 
 
