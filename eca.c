@@ -119,7 +119,6 @@ bool determineEvoState(int rule, int cellNeighborhood) {
 
 void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state) {
     // Set an individual cell at a certain location to alive or dead
-    int blockIndex;
     int localCellIndex;
     CellBlock* targetBlockPtr;
     CellBlock bitMask;
