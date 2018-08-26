@@ -22,6 +22,7 @@ MIT License
 #define INIT_CODE (SINGLE_CENTER_ALIVE)
 
 
+
 // Read command line arguments
 
 int getRule(char* str) {
@@ -48,15 +49,15 @@ int main(int argc, char* argv[]) {
     int rule;
     Simulation* testSimPtr;
 
-    int getRule(char* str);
-    Simulation* createSim(int rule,
-                          int habitatSize,
-                          int genBufferSize,
-                          BoundaryCode borderType,
-                          ConfigCode initCode);
-    void iterateSim(Simulation* simPtr, int iterations);
-    void simOut(Simulation* simPtr);
-    void destroySim(Simulation* simPtr);
+    extern int getRule(char* str);
+    extern Simulation* createSim(int rule,
+          	                 int habitatSize,
+                                 int genBufferSize,
+                                 BoundaryCode borderType,
+                                 ConfigCode initCode);
+    extern void iterateSim(Simulation* simPtr, int iterations);
+    extern void simOut(Simulation* simPtr);
+    extern void destroySim(Simulation* simPtr);
 
     if (argc != 2) { // Take a single argument
         fprintf(stderr, "Usage: %s rule\n", argv[0]);

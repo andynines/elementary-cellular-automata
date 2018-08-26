@@ -28,5 +28,6 @@ ecaout.o: ecaout.c eca.h ecaout.h
 utils.o: utils.c utils.h
 	$(cc) $(cflags) -c utils.c
 
+.PHONY: clean
 clean:
-	rm *.o ecaTerm
+	-rm *.o ecaTerm

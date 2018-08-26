@@ -17,7 +17,7 @@ MIT License
 
 // Functions for reading and writing simulation data
 
-CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex) {
+static CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex) {
     // Return pointer to the CellBlock containing the cell at cellIndex
     int blockIndex;
     CellBlock* blockPtr;
@@ -30,7 +30,7 @@ CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex) {
 
 
 
-bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
+static bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
     // Determine whether cell at index is alive or dead
     CellBlock* blockPtr;
     int localCellIndex;
@@ -49,7 +49,7 @@ bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
 
 
 
-void copyGen(CellBlock* source, CellBlock* target, int blockReq) {
+static void copyGen(CellBlock* source, CellBlock* target, int blockReq) {
     
     int blockIndex;
 
@@ -60,7 +60,7 @@ void copyGen(CellBlock* source, CellBlock* target, int blockReq) {
 
 
 
-int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex) {
+static int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex) {
     // Return integer in [0,7] representing neighborhood of the cell at cellIndex
     int bitMask;
     int cellNeighborhood;
@@ -68,7 +68,7 @@ int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex) {
     bool wrapOccurred;
     bool currentCellState;
 
-    bool wrap(int* n, int min, int max);
+    extern bool wrap(int* n, int min, int max);
     bool getCellState(CellBlock* intlBlockPtr, int cellIndex);
 
     --cellIndex; // Begin with left neighbor of desired cell
@@ -104,7 +104,7 @@ int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex) {
 
 
 
-bool determineEvoState(int rule, int cellNeighborhood) {
+static bool determineEvoState(int rule, int cellNeighborhood) {
     // Given a cell's neighborhood, determine its state in the next generation
     int bitMask;
     bool cellState;
@@ -117,7 +117,7 @@ bool determineEvoState(int rule, int cellNeighborhood) {
 
 
 
-void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state) {
+static void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state) {
     // Set an individual cell at a certain location to alive or dead
     int localCellIndex;
     CellBlock* targetBlockPtr;
@@ -148,7 +148,7 @@ void iterateSim(Simulation* simPtr, int iterations) {
     int cellNeighborhood;
     bool cellState;
 
-    int min(int a, int b);
+    extern int min(int a, int b);
     void copyGen(CellBlock* source, CellBlock* target, int blockReq);
     int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex);
     bool determineEvoState(int rule, int cellNeighborhood);
@@ -179,7 +179,7 @@ void iterateSim(Simulation* simPtr, int iterations) {
 
 // Generation initialization methods
 
-void totalFill(Simulation* simPtr, int genIndex, bool state) {
+static void totalFill(Simulation* simPtr, int genIndex, bool state) {
     // Sets all cells in a generation to alive or dead
     Generation targetGen;
     CellBlock* targetBlockPtr;
@@ -206,7 +206,7 @@ void totalFill(Simulation* simPtr, int genIndex, bool state) {
 
 
 
-void centeredFill(Simulation* simPtr, int genIndex, bool state) {
+static void centeredFill(Simulation* simPtr, int genIndex, bool state) {
     // Center a single cell of the specified state
     int habitatSize;
     int centerCellIndex;
@@ -230,7 +230,7 @@ void centeredFill(Simulation* simPtr, int genIndex, bool state) {
 
 
 
-void orderlyFill(Simulation* simPtr, int genIndex, double proportion) {
+static void orderlyFill(Simulation* simPtr, int genIndex, double proportion) {
     // Set a proportion of evenly spaced cells to be alive
     int habitatSize;
     int aliveReq;
@@ -240,7 +240,7 @@ void orderlyFill(Simulation* simPtr, int genIndex, double proportion) {
     int cellIndex;
     bool stateBuffer;
 
-    int gcd(int a, int b);
+    extern int gcd(int a, int b);
     void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
 
     habitatSize = simPtr->habitatSize;
@@ -261,7 +261,7 @@ void orderlyFill(Simulation* simPtr, int genIndex, double proportion) {
 
 
 
-void probabilisticFill(Simulation* simPtr, int genIndex, double prob) {
+static void probabilisticFill(Simulation* simPtr, int genIndex, double prob) {
     // Randomly set a guarenteed proportion of cells to alive
     int habitatSize;
     int aliveReq;
@@ -269,7 +269,7 @@ void probabilisticFill(Simulation* simPtr, int genIndex, double prob) {
     double aliveChance;
     bool stateBuffer;
 
-    bool binomProb(double p);
+    extern bool binomProb(double p);
     void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
 
     habitatSize = simPtr->habitatSize;
@@ -290,7 +290,7 @@ void probabilisticFill(Simulation* simPtr, int genIndex, double prob) {
 
 
 
-void initGen(Simulation* simPtr, int genIndex, ConfigCode initCode) {
+static void initGen(Simulation* simPtr, int genIndex, ConfigCode initCode) {
     // Initialize a generation with some specified configuration
     int habitatSize;
 
