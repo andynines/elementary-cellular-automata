@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     void destroySim(Simulation* simPtr);
 
     if (argc != 2) { // Take a single argument
-        fprintf(stderr, "Usage: %s [rule]\n", argv[0]);
+        fprintf(stderr, "Usage: %s rule\n", argv[0]);
         return (-1);
     }
     rule = getRule(argv[1]); // Read argument as an int

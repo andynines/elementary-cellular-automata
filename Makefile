@@ -4,31 +4,35 @@
 
 # Compiler options
 
-compiler = gcc
-flags = -Wall -std=c99 -v
+cc = gcc
+cflags = -Wall -std=c99
 
 
 
-# Terminal simulation
+# Recipes
 
-termName = ecaTerm
-termSrc = ecaTerm.c eca.c ecaout.c utils.c
+all: ecaTerm ecaVisual
 
+ecaTerm: ecaTerm.o eca.o ecaout.o utils.o
+	$(cc) $(cflags) -o ecaTerm ecaTerm.o eca.o ecaout.o utils.o
 
+ecaVisual: ecaVisual.o eca.o utils.o
+	$(cc) $(cflags) -o ecaVisual ecaVisual.o eca.o utils.o
 
-# SDL visual simulation
+ecaTerm.o: ecaTerm.c eca.h ecaout.h
+	$(cc) $(cflags) -c ecaTerm.c
 
-visualName = ecaVisual
-visualSrc = ecaVisual.c eca.c utils.c
+ecaVisual.o: ecaVisual.c
+	$(cc) $(cflags) `sdl-config --cflags --libs` -c ecaVisual.c
 
+eca.o: eca.c eca.h utils.h
+	$(cc) $(cflags) -c eca.c
 
+ecaout.o: ecaout.c eca.h ecaout.h
+	$(cc) $(cflags) -c ecaout.c
 
-# Compilation
+utils.o: utils.c utils.h
+	$(cc) $(cflags) -c utils.c
 
-all: $(termName) $(visualName)
-
-$(termName):
-	$(compiler) $(flags) -o $(termName) $(termSrc)
-
-$(visualName):
-	$(compiler) `sdl2-config --cflags --libs` $(flags) -o $(visualName) $(visualSrc) -lSDL
+clean:
+	rm *.o ecaTerm ecaVisual
