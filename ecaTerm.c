@@ -26,13 +26,20 @@ MIT License
 int main(void) {
 
     Simulation* testSimPtr;
+
+    Simulation* createSim(int rule,
+                          int habitatSize,
+                          int genBufferSize,
+                          BoundaryCode borderType,
+                          ConfigCode initCode);
+    void iterateSim(Simulation* simPtr, int iterations);
+    void simOut(Simulation* simPtr);
+    void destroySim(Simulation* simPtr);
     // TODO: Read in variables as cmd line arguments
     testSimPtr = createSim(RULE, HABITAT_SIZE, BUFFER_SIZE, BOUNDARY_CODE, INIT_CODE);
-    
+
     iterateSim(testSimPtr, BUFFER_SIZE - 1);
-
     simOut(testSimPtr);
-
     destroySim(testSimPtr);
 
     return 0;
