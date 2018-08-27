@@ -25,7 +25,7 @@ void genOut(Simulation* simPtr, int genIndex) {
     OutChar cellOut;
 
     currentBlockPtr = simPtr->genArr[genIndex].blockArr;
-    bitMask = 1 << (blockBits - 1); // Set to 100 000 ... 000
+    bitMask = 1 << (BLOCK_BITS - 1); // Set to 100 000 ... 000
 
     for (cellIndex = 0; cellIndex < (simPtr->habitatSize); ++cellIndex) {
         currentCellState = *currentBlockPtr & bitMask;
@@ -37,7 +37,7 @@ void genOut(Simulation* simPtr, int genIndex) {
         putchar(cellOut);
         bitMask >>= 1;
         if (!bitMask) {
-            bitMask = 1 << (blockBits - 1);
+            bitMask = 1 << (BLOCK_BITS - 1);
             ++currentBlockPtr;
         }
     }

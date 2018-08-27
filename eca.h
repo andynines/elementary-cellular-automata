@@ -18,8 +18,8 @@ MIT License
 
 // Constants
 
-#define blockBytes (sizeof(CellBlock))
-#define blockBits (blockBytes * 8)
+#define BLOCK_BYTES (sizeof(CellBlock))
+#define BLOCK_BITS (BLOCK_BYTES * 8)
 
 
 

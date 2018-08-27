@@ -22,7 +22,7 @@ static CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex) {
     int blockIndex;
     CellBlock* blockPtr;
 
-    blockIndex = cellIndex / blockBits;
+    blockIndex = cellIndex / BLOCK_BITS;
     blockPtr = intlBlockPtr + blockIndex;
 
     return blockPtr;
@@ -40,8 +40,8 @@ static bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
     CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex);
 
     blockPtr = getContainerBlock(intlBlockPtr, cellIndex);
-    localCellIndex = cellIndex % blockBits;
-    bitMask = 1 << (blockBits - localCellIndex - 1);
+    localCellIndex = cellIndex % BLOCK_BITS;
+    bitMask = 1 << (BLOCK_BITS - localCellIndex - 1);
     cellState = *blockPtr & bitMask;
 
     return cellState;
@@ -126,8 +126,8 @@ static void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state) {
     CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex);
 
     targetBlockPtr = getContainerBlock(intlBlockPtr, cellIndex);
-    localCellIndex = cellIndex % blockBits;
-    bitMask = 1 << (blockBits - localCellIndex - 1);
+    localCellIndex = cellIndex % BLOCK_BITS;
+    bitMask = 1 << (BLOCK_BITS - localCellIndex - 1);
 
     if (state) {
         *targetBlockPtr |= bitMask;
@@ -368,13 +368,13 @@ Simulation* createSim(int rule,
     newSimPtr->borderType = borderType;
 
     // Calculate number of CellBlocks needed to store one generation of data
-    blockReq = (blockBits + habitatSize - 1) / blockBits;
+    blockReq = (BLOCK_BITS + habitatSize - 1) / BLOCK_BITS;
     newSimPtr->blockReq = blockReq;
 
     // Allocate memory to store specified number of generations in buffer
     newSimPtr->genArr = (Generation*) malloc(sizeof(Generation) * genBufferSize);
     for (genIndex = 0; genIndex < genBufferSize; ++genIndex) {
-        newSimPtr->genArr[genIndex].blockArr = (CellBlock*) malloc(blockBytes * blockReq);
+        newSimPtr->genArr[genIndex].blockArr = (CellBlock*) malloc(BLOCK_BYTES * blockReq);
     }
 
     initGen(newSimPtr, 0, initCode); // Set up specified initial configuration
