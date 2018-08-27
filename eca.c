@@ -50,7 +50,7 @@ static bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
 
 
 static void copyGen(CellBlock* source, CellBlock* target, int blockReq) {
-    
+    // Copy one generation's cells to another
     int blockIndex;
 
     for (blockIndex = 0; blockIndex < blockReq; ++blockIndex) {
