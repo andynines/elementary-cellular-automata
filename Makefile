@@ -13,11 +13,11 @@ cflags = -Wall -std=c99
 
 all: ecaTerm ecaVisual
 
-ecaTerm: ecaTerm.o eca.o ecaout.o utils.o
-	$(cc) $(cflags) -o ecaTerm ecaTerm.o eca.o ecaout.o utils.o
+ecaTerm: ecaTerm.o eca.o ecaout.o fracs.o utils.o
+	$(cc) $(cflags) -o ecaTerm ecaTerm.o eca.o ecaout.o fracs.o utils.o
 
-ecaVisual: ecaVisual.o eca.o utils.o
-	$(cc) $(cflags) -o ecaVisual ecaVisual.o eca.o utils.o -lSDL2
+ecaVisual: ecaVisual.o eca.o fracs.o utils.o
+	$(cc) $(cflags) -o ecaVisual ecaVisual.o eca.o fracs.o utils.o -lSDL2
 
 ecaTerm.o: ecaTerm.c
 	$(cc) $(cflags) -c ecaTerm.c
@@ -30,6 +30,9 @@ eca.o: eca.c eca.h
 
 ecaout.o: ecaout.c ecaout.h
 	$(cc) $(cflags) -c ecaout.c
+
+fracs.o: fracs.c fracs.h
+	$(cc) $(cflags) -c fracs.c
 
 utils.o: utils.c utils.h
 	$(cc) $(cflags) -c utils.c

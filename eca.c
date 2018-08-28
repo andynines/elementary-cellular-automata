@@ -11,6 +11,7 @@ MIT License
 #include <time.h>
 
 #include "eca.h"
+#include "fracs.h"
 #include "utils.h"
 
 // TODO: Test all uses of free() with Valgrind
