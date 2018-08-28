@@ -5,7 +5,7 @@
 # Compiler options
 
 cc = gcc
-cflags = -Wall -std=c99 -v
+cflags = -Wall -std=c99
 
 
 

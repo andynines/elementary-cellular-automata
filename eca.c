@@ -13,7 +13,7 @@ MIT License
 #include "eca.h"
 #include "utils.h"
 
-
+// TODO: Test all uses of free() with Valgrind
 
 // Functions for reading and writing simulation data
 
@@ -49,12 +49,12 @@ static bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
 
 
 
-static void copyGen(CellBlock* source, CellBlock* target, int blockReq) {
+static void copyGen(CellBlock* sourceIntlPtr, CellBlock* targetIntlPtr, int blockReq) {
     // Copy one generation's cells to another
     int blockIndex;
 
     for (blockIndex = 0; blockIndex < blockReq; ++blockIndex) {
-        target[blockIndex] = source[blockIndex];
+        targetIntlPtr[blockIndex] = sourceIntlPtr[blockIndex];
     }
 }
 
@@ -68,7 +68,7 @@ static int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellInd
     bool wrapOccurred;
     bool currentCellState;
 
-    extern bool wrap(int* n, int min, int max);
+    extern bool wrap(int* n, int  nMax);
     bool getCellState(CellBlock* intlBlockPtr, int cellIndex);
 
     --cellIndex; // Begin with left neighbor of desired cell
@@ -76,7 +76,7 @@ static int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellInd
     cellNeighborhood = 0;
 
     for (neighborIndex = 0; neighborIndex < 3; ++neighborIndex) {
-        wrapOccurred = wrap(&cellIndex, 0, (simPtr->habitatSize) - 1);
+        wrapOccurred = wrap(&cellIndex, (simPtr->habitatSize) - 1);
         if (wrapOccurred) {
             switch (simPtr->borderType) {
                 case WRAP:
@@ -139,6 +139,33 @@ static void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state) {
 
 
 
+static void rotateCells(Simulation* simPtr, int genIndex, int rotVector) {
+    // Rotate cells in the specified direction; positive vectors move right
+    Generation tempGen;
+    int cellIndex;
+    int tempIndex;
+    bool cellState;
+
+    void copyGen(CellBlock* sourceIntlPtr, CellBlock* targetIntlPtr, int blockReq);
+    extern bool wrap(int* n, int nMax);
+    bool getCellState(CellBlock* intlBlockPtr, int cellIndex);
+    void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
+
+    tempGen.blockArr = (CellBlock*) malloc(BLOCK_BYTES * (simPtr->blockReq));
+    copyGen(simPtr->genArr[genIndex].blockArr, tempGen.blockArr, simPtr->blockReq);
+    
+    for (cellIndex = 0; cellIndex < (simPtr->habitatSize); ++cellIndex) {
+        tempIndex = cellIndex + (simPtr->habitatSize) - rotVector;
+        wrap(&tempIndex, (simPtr->habitatSize) - 1);
+        cellState = getCellState(tempGen.blockArr, tempIndex);
+        setCell(simPtr->genArr[genIndex].blockArr, cellIndex, cellState);
+    }
+
+    free(tempGen.blockArr);
+}
+    
+
+
 void iterateSim(Simulation* simPtr, int iterations) {
     // Calculate the next state of a simulation and manage the buffer
     int maxGenIndex;
@@ -149,7 +176,7 @@ void iterateSim(Simulation* simPtr, int iterations) {
     bool cellState;
 
     extern int min(int a, int b);
-    void copyGen(CellBlock* source, CellBlock* target, int blockReq);
+    void copyGen(CellBlock* sourceIntlPtr, CellBlock* targetIntlPtr, int blockReq);
     int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex);
     bool determineEvoState(int rule, int cellNeighborhood);
     void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
@@ -179,92 +206,46 @@ void iterateSim(Simulation* simPtr, int iterations) {
 
 // Generation initialization methods
 
-static void totalFill(Simulation* simPtr, int genIndex, bool state) {
-    // Sets all cells in a generation to alive or dead
-    Generation targetGen;
-    CellBlock* targetBlockPtr;
-    CellBlock bitMask;
-    int blockIndex;
-
-    targetGen = simPtr->genArr[genIndex];
-    targetBlockPtr = targetGen.blockArr;
-
-    bitMask = 0;
-    if (state) {
-        bitMask = ~bitMask;
-    }
-
-    for (blockIndex = 0; blockIndex < (simPtr->blockReq); ++blockIndex) {
-        if (state) {
-            *targetBlockPtr |= bitMask;
-        } else {
-            *targetBlockPtr &= bitMask;
-        }
-        ++targetBlockPtr;
-    }
-}
-
-
-
-static void centeredFill(Simulation* simPtr, int genIndex, bool state) {
-    // Center a single cell of the specified state
+static void orderlyFill(Simulation* simPtr, int genIndex, int aliveReq) {
+    // Set some number of evenly spaced cells to be alive
     int habitatSize;
-    int centerCellIndex;
+    Fraction* cellRatioPtr;
+    int num;
+    int denom;
     int cellIndex;
     bool stateBuffer;
 
+    extern Fraction* createFrac(int num, int denom);
+    extern void simplfyFrac(Fraction* fracPtr);
+    extern void destroyFrac(Fraction* fracPtr);
     void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
+    void rotateCells(Simulation* simPtr, int genIndex, int rotVector);
 
     habitatSize = simPtr->habitatSize;
-    centerCellIndex = habitatSize / 2;
+    cellRatioPtr = createFrac(aliveReq, habitatSize);
+    simplifyFrac(cellRatioPtr);
+    num = cellRatioPtr->num;
+    denom = cellRatioPtr->denom;
 
     for (cellIndex = 0; cellIndex < habitatSize; ++cellIndex) {
-        if (cellIndex == centerCellIndex) {
-            stateBuffer = state;
-        } else {
-            stateBuffer = (!state);
-        }
-        setCell(simPtr->genArr[genIndex].blockArr, cellIndex, stateBuffer);
-    }
-}
-
-
-
-static void orderlyFill(Simulation* simPtr, int genIndex, double proportion) {
-    // Set a proportion of evenly spaced cells to be alive
-    int habitatSize;
-    int aliveReq;
-    int ratioGcd;
-    int clusterSize;
-    int aliveClusterSize;
-    int cellIndex;
-    bool stateBuffer;
-
-    extern int gcd(int a, int b);
-    void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
-
-    habitatSize = simPtr->habitatSize;
-    aliveReq = habitatSize * proportion;
-    ratioGcd = gcd(habitatSize - (habitatSize % 4), aliveReq);
-    clusterSize = habitatSize / ratioGcd;
-    aliveClusterSize = aliveReq / ratioGcd;
-
-    for (cellIndex = 0; cellIndex < habitatSize; ++cellIndex) {
-        if ((cellIndex % clusterSize) < aliveClusterSize) {
+        if (cellIndex % denom < num) {
             stateBuffer = 1;
         } else {
             stateBuffer = 0;
         }
         setCell(simPtr->genArr[genIndex].blockArr, cellIndex, stateBuffer);
     }
+    // Center the configuration as much as possible
+    rotateCells(simPtr, genIndex, (denom - num) / 2);
+
+    destroyFrac(cellRatioPtr);
 }
 
 
 
-static void probabilisticFill(Simulation* simPtr, int genIndex, double prob) {
-    // Randomly set a guarenteed proportion of cells to alive
+static void probabilisticFill(Simulation* simPtr, int genIndex, int aliveReq) {
+    // Randomly set a guaranteed number of cells to alive
     int habitatSize;
-    int aliveReq;
     int cellIndex;
     double aliveChance;
     bool stateBuffer;
@@ -273,7 +254,6 @@ static void probabilisticFill(Simulation* simPtr, int genIndex, double prob) {
     void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
 
     habitatSize = simPtr->habitatSize;
-    aliveReq = habitatSize * prob; // Number of cells we want to be alive
 
     for (cellIndex = 0; cellIndex < habitatSize; ++cellIndex) {
         // Adjust probability based on available space and how many cells need to be alive
@@ -292,51 +272,15 @@ static void probabilisticFill(Simulation* simPtr, int genIndex, double prob) {
 
 static void initGen(Simulation* simPtr, int genIndex, ConfigCode initCode) {
     // Initialize a generation with some specified configuration
-    int habitatSize;
+    void orderlyFill(Simulation* simPtr, int genIndex, int aliveReq);
+    void probabilisticFill(Simulation* simPtr, int genIndex, int aliveReq);
 
-    void totalFill(Simulation* simPtr, int genIndex, bool state);
-    void centeredFill(Simulation* simPtr, int genIndex, bool state);
-    void orderlyFill(Simulation* simPtr, int genIndex, double proportion);
-    void probabilisticFill(Simulation* simPtr, int genIndex, double prob);
-
-    habitatSize = simPtr->habitatSize;
-    // TODO: Rewrite initialization system with non-hardcoded configurations
-    switch (initCode) {
-        case ALL_DEAD:
-            totalFill(simPtr, genIndex, 0);
+    switch (initCode.spacing) {
+        case EVEN:
+            orderlyFill(simPtr, genIndex, initCode.aliveReq);
             break;
-        case SINGLE_CENTER_ALIVE:
-            centeredFill(simPtr, genIndex, 1);
-            break;
-        case SINGLE_RANDOM_ALIVE:
-            probabilisticFill(simPtr, genIndex, (double) 1 / habitatSize);
-            break;
-        case QUARTER_SPACED_ALIVE:
-            orderlyFill(simPtr, genIndex, 0.25f);
-            break;
-        case QUARTER_RANDOM_ALIVE:
-            probabilisticFill(simPtr, genIndex, 0.25f);
-            break;
-        case HALF_SPACED_ALIVE:
-            orderlyFill(simPtr, genIndex, 0.5f);
-            break;
-        case HALF_RANDOM_ALIVE:
-            probabilisticFill(simPtr, genIndex, 0.5f);
-            break;
-        case THREEQUARTERS_SPACED_ALIVE:
-            orderlyFill(simPtr, genIndex, 0.75f);
-            break;
-        case THREEQUARTERS_RANDOM_ALIVE:
-            probabilisticFill(simPtr, genIndex, 0.75f);
-            break;
-        case SINGLE_CENTER_DEAD:
-            centeredFill(simPtr, genIndex, 0);
-            break;
-        case SINGLE_RANDOM_DEAD:
-            probabilisticFill(simPtr, genIndex, (double) (habitatSize - 1) / habitatSize);
-            break;
-        case ALL_ALIVE:
-            totalFill(simPtr, genIndex, 1);
+        case RANDOM:
+            probabilisticFill(simPtr, genIndex, initCode.aliveReq);
             break;
     }
 }
@@ -380,7 +324,8 @@ Simulation* createSim(int rule,
     initGen(newSimPtr, 0, initCode); // Set up specified initial configuration
     for (genIndex = 1; genIndex < genBufferSize; ++genIndex) {
         // Set all the cells in every other generation of the buffer to dead
-        initGen(newSimPtr, genIndex, ALL_DEAD);
+        initGen(newSimPtr, genIndex, (ConfigCode) {.aliveReq = 0, .spacing = EVEN});
+        // Vim doesn't like me casting that ConfigCode struct for some reason...
     }
 
     return newSimPtr;
@@ -388,7 +333,7 @@ Simulation* createSim(int rule,
 
 
 
-void destroySim(Simulation* simPtr) { // TODO: Test this method w/ Valgrind
+void destroySim(Simulation* simPtr) {
     // Completely remove a simulation's data from memory
     int genIndex;
 

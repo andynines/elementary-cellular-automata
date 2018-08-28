@@ -26,19 +26,15 @@ MIT License
 // Data types
 
 typedef enum {
+    // Represent the available ways of spacing alive cells
+    EVEN,
+    RANDOM
+} SpacingCode;
+
+typedef struct {
     // Represent different configurations for generation initializer
-    ALL_DEAD,
-    SINGLE_CENTER_ALIVE,
-    SINGLE_RANDOM_ALIVE,
-    QUARTER_SPACED_ALIVE,
-    QUARTER_RANDOM_ALIVE,
-    HALF_SPACED_ALIVE,
-    HALF_RANDOM_ALIVE,
-    THREEQUARTERS_SPACED_ALIVE,
-    THREEQUARTERS_RANDOM_ALIVE,
-    SINGLE_CENTER_DEAD,
-    SINGLE_RANDOM_DEAD,
-    ALL_ALIVE
+    int aliveReq;
+    SpacingCode spacing;
 } ConfigCode;
 
 typedef enum {

@@ -19,7 +19,8 @@ MIT License
 #define HABITAT_SIZE (80)
 #define BUFFER_SIZE (25)
 #define BORDER_CODE (WRAP)
-#define INIT_CODE (SINGLE_CENTER_ALIVE)
+#define ALIVE_CELLS (1)
+#define SPACING (EVEN)
 
 
 
@@ -31,7 +32,7 @@ int getRule(char* str) {
 
     conversion = atoi(str);
 
-    if (conversion || (str[0] == '0')) { // Make sure 0 was'nt intended
+    if (conversion || (str[0] == '0')) { // Make sure 0 wasn't intended
         if ((conversion >= 0) && (conversion <= 255)) {
             return conversion;
         }
@@ -49,7 +50,7 @@ int main(int argc, char* argv[]) {
     int rule;
     Simulation* testSimPtr;
 
-    extern int getRule(char* str);
+    int getRule(char* str);
     extern Simulation* createSim(int rule,
           	                 int habitatSize,
                                  int genBufferSize,
@@ -69,7 +70,11 @@ int main(int argc, char* argv[]) {
         return (-1);
     }
 
-    testSimPtr = createSim(rule, HABITAT_SIZE, BUFFER_SIZE, BORDER_CODE, INIT_CODE);
+    testSimPtr = createSim(rule,
+                           HABITAT_SIZE,
+                           BUFFER_SIZE,
+                           BORDER_CODE,
+                           (ConfigCode) {.aliveReq = ALIVE_CELLS, .spacing = SPACING});
     iterateSim(testSimPtr, (testSimPtr->genBufferSize) - 1);
     printf("Rule %i\n", rule);
     simOut(testSimPtr);

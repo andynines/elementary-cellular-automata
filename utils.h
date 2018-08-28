@@ -16,15 +16,28 @@ MIT License
 
 
 
+// Fraction data type
+
+typedef struct {
+    int num;
+    int denom;
+} Fraction;
+
+
+
 // Function declarations
+
+Fraction* createFrac(int num, int denom);
+
+void simplifyFrac(Fraction* fracPtr);
+
+void destroyFrac(Fraction* fracPtr);
 
 bool binomProb(double p);
 
-int gcd(int a, int b);
-
 int min(int a, int b);
 
-bool wrap(int* n, int min, int max);
+bool wrap(int* n, int nMax);
 
 
 
