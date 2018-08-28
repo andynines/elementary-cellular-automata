@@ -11,19 +11,19 @@ cflags = -Wall -std=c99
 
 # Recipes
 
-all: ecaTerm ecaVisual
+all: ecaterm ecavisual
 
-ecaTerm: ecaTerm.o eca.o ecaout.o fracs.o utils.o
-	$(cc) $(cflags) -o ecaTerm ecaTerm.o eca.o ecaout.o fracs.o utils.o
+ecaterm: ecaterm.o eca.o ecaout.o fracs.o utils.o
+	$(cc) $(cflags) -o ecaterm ecaterm.o eca.o ecaout.o fracs.o utils.o
 
-ecaVisual: ecaVisual.o eca.o fracs.o utils.o
-	$(cc) $(cflags) -o ecaVisual ecaVisual.o eca.o fracs.o utils.o -lSDL2
+ecavisual: ecavisual.o eca.o fracs.o utils.o
+	$(cc) $(cflags) -o ecavisual ecavisual.o eca.o fracs.o utils.o -lSDL2
 
-ecaTerm.o: ecaTerm.c
-	$(cc) $(cflags) -c ecaTerm.c
+ecaterm.o: ecaterm.c
+	$(cc) $(cflags) -c ecaterm.c
 
-ecaVisual.o: ecaVisual.c
-	$(cc) $(cflags) -c `sdl2-config --cflags --libs` ecaVisual.c
+ecavisual.o: ecavisual.c
+	$(cc) $(cflags) -c `sdl2-config --cflags --libs` ecavisual.c
 
 eca.o: eca.c eca.h
 	$(cc) $(cflags) -c eca.c
@@ -39,4 +39,4 @@ utils.o: utils.c utils.h
 
 .PHONY: clean
 clean:
-	-rm *.o ecaTerm ecaVisual
+	-rm *.o ecaterm ecavisual

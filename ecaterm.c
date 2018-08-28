@@ -1,5 +1,5 @@
 /*
-ecaTerm.c
+ecaterm.c
 Copyright (c) 2018 andynines
 MIT License
 */

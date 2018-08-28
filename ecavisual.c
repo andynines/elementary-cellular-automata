@@ -1,5 +1,5 @@
 /*
-ecaVisual.c
+ecavisual.c
 Copyright (c) 2018 andynines
 MIT License
 */

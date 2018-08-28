@@ -1,7 +1,7 @@
 # Elementary Cellular Automata
 This is a simulator for the elementary cellular automata. It is still very much a work in progress!
 ```
-$ ./ecaTerm 30
+$ ./ecaterm 30
 Rule 30
 ----------------------------------------0---------------------------------------
 ---------------------------------------000--------------------------------------

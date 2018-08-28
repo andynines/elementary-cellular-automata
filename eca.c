@@ -167,44 +167,6 @@ static void rotateCells(Simulation* simPtr, int genIndex, int rotVector) {
     
 
 
-void iterateSim(Simulation* simPtr, int iterations) {
-    // Calculate the next state of a simulation and manage the buffer
-    int maxGenIndex;
-    int targetGenIndex;
-    int genIndex;
-    int cellIndex;
-    int cellNeighborhood;
-    bool cellState;
-
-    extern int min(int a, int b);
-    void copyGen(CellBlock* sourceIntlPtr, CellBlock* targetIntlPtr, int blockReq);
-    int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex);
-    bool determineEvoState(int rule, int cellNeighborhood);
-    void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
-
-    maxGenIndex = (simPtr->genBufferSize) - 1;
-
-    for (; iterations > 0; --iterations) {
-        targetGenIndex = min((simPtr->age) + 1, maxGenIndex);
-        // If buffer is full, shift every gen back and truncate the oldest
-        if ((simPtr->age) > maxGenIndex) {
-            for (genIndex = 0; genIndex < maxGenIndex; ++genIndex) {
-                copyGen(simPtr->genArr[genIndex + 1].blockArr,
-                        simPtr->genArr[genIndex].blockArr,
-                        simPtr->blockReq);
-            }
-        }
-        for (cellIndex = 0; cellIndex < (simPtr->habitatSize); ++cellIndex) {
-            cellNeighborhood = extractCellNeighborhood(simPtr, (targetGenIndex - 1), cellIndex);
-            cellState = determineEvoState(simPtr->rule, cellNeighborhood);
-            setCell(simPtr->genArr[targetGenIndex].blockArr, cellIndex, cellState);
-        }
-        ++(simPtr->age);
-    }
-}
-
-
-
 // Generation initialization methods
 
 static void orderlyFill(Simulation* simPtr, int genIndex, int aliveReq) {
@@ -288,7 +250,7 @@ static void initGen(Simulation* simPtr, int genIndex, ConfigCode initCode) {
 
 
 
-// Simulation creation and deletion
+// Functions for operating simulations
 
 Simulation* createSim(int rule,
                       int habitatSize,
@@ -330,6 +292,44 @@ Simulation* createSim(int rule,
     }
 
     return newSimPtr;
+}
+
+
+
+void iterateSim(Simulation* simPtr, int iterations) {
+    // Calculate the next state of a simulation and manage the buffer
+    int maxGenIndex;
+    int targetGenIndex;
+    int genIndex;
+    int cellIndex;
+    int cellNeighborhood;
+    bool cellState;
+
+    extern int min(int a, int b);
+    void copyGen(CellBlock* sourceIntlPtr, CellBlock* targetIntlPtr, int blockReq);
+    int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellIndex);
+    bool determineEvoState(int rule, int cellNeighborhood);
+    void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
+
+    maxGenIndex = (simPtr->genBufferSize) - 1;
+
+    for (; iterations > 0; --iterations) {
+        targetGenIndex = min((simPtr->age) + 1, maxGenIndex);
+        // If buffer is full, shift every gen back and truncate the oldest
+        if ((simPtr->age) > maxGenIndex) {
+            for (genIndex = 0; genIndex < maxGenIndex; ++genIndex) {
+                copyGen(simPtr->genArr[genIndex + 1].blockArr,
+                        simPtr->genArr[genIndex].blockArr,
+                        simPtr->blockReq);
+            }
+        }
+        for (cellIndex = 0; cellIndex < (simPtr->habitatSize); ++cellIndex) {
+            cellNeighborhood = extractCellNeighborhood(simPtr, (targetGenIndex - 1), cellIndex);
+            cellState = determineEvoState(simPtr->rule, cellNeighborhood);
+            setCell(simPtr->genArr[targetGenIndex].blockArr, cellIndex, cellState);
+        }
+        ++(simPtr->age);
+    }
 }
 
 
