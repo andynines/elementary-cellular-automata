@@ -57,6 +57,7 @@ typedef struct {
     int genBufferSize;
     int blockReq;
     BoundaryCode borderType;
+    ConfigCode initCode;
     Generation* genArr;
 } Simulation;
 
@@ -64,13 +65,13 @@ typedef struct {
 
 // Function declarations
 
-void iterateSim(Simulation* simPtr, int iterations);
-
 Simulation* createSim(int rule,
                       int habitatSize,
                       int genBufferSize,
                       BoundaryCode borderType,
                       ConfigCode initCode);
+
+void iterateSim(Simulation* simPtr, int iterations);
 
 void destroySim(Simulation* simPtr);
 

@@ -233,10 +233,14 @@ static void probabilisticFill(Simulation* simPtr, int genIndex, int aliveReq) {
 
 
 
-static void initGen(Simulation* simPtr, int genIndex, ConfigCode initCode) {
+static void initGen(Simulation* simPtr, int genIndex) {
     // Initialize a generation with some specified configuration
+    ConfigCode initCode;
+
     void orderlyFill(Simulation* simPtr, int genIndex, int aliveReq);
     void probabilisticFill(Simulation* simPtr, int genIndex, int aliveReq);
+
+    initCode = simPtr->initCode;
 
     switch (initCode.spacing) {
         case EVEN:
@@ -262,7 +266,7 @@ Simulation* createSim(int rule,
     int blockReq;
     int genIndex;
 
-    void initGen(Simulation* simPtr, int genIndex, ConfigCode initCode);
+    void initGen(Simulation* simPtr, int genIndex);
 
     srand(time(0));
 
@@ -273,6 +277,7 @@ Simulation* createSim(int rule,
     newSimPtr->habitatSize = habitatSize;
     newSimPtr->genBufferSize = genBufferSize;
     newSimPtr->borderType = borderType;
+    newSimPtr->initCode = initCode;
 
     // Calculate number of CellBlocks needed to store one generation of data
     blockReq = (BLOCK_BITS + habitatSize - 1) / BLOCK_BITS;
@@ -284,11 +289,10 @@ Simulation* createSim(int rule,
         newSimPtr->genArr[genIndex].blockArr = (CellBlock*) malloc(BLOCK_BYTES * blockReq);
     }
 
-    initGen(newSimPtr, 0, initCode); // Set up specified initial configuration
+    initGen(newSimPtr, 0); // Set up specified initial configuration
     for (genIndex = 1; genIndex < genBufferSize; ++genIndex) {
         // Set all the cells in every other generation of the buffer to dead
-        initGen(newSimPtr, genIndex, (ConfigCode) {.aliveReq = 0, .spacing = EVEN});
-        // Vim doesn't like me casting that ConfigCode struct for some reason...
+        initGen(newSimPtr, genIndex);
     }
 
     return newSimPtr;
