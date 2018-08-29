@@ -120,7 +120,6 @@ Simulation* createUserSim(int argc, char* argv[]) {
     
     for (bufferIndex = 0; bufferIndex < ECA_ARGC; ++bufferIndex) {
         if (!argBuffer[bufferIndex]) {
-            printf("%i\n", argBuffer[bufferIndex]);
             usage(argv[0]);
             return (Simulation*) 0;
         }

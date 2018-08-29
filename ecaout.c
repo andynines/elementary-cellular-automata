@@ -51,7 +51,7 @@ void simOut(Simulation* simPtr) {
     // Output the entirety of a simulation's generation buffer
     int genIndex;
 
-    char* const borders[] = {"Wraps at", "Dead", "Live"};
+    char* const borders[] = {"Wrapped", "Dead", "Live"};
     char* const spacings[] = {"evenly", "randomly"};
 
     void genOut(Simulation *simPtr, int genIndex);
