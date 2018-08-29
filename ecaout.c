@@ -51,12 +51,12 @@ void simOut(Simulation* simPtr) {
     // Output the entirety of a simulation's generation buffer
     int genIndex;
 
-    char* const borders[] = {"Wrapped", "Dead borders", "Live borders"};
+    char* const borders[] = {"Wraps at", "Dead", "Live"};
     char* const spacings[] = {"evenly", "randomly"};
 
     void genOut(Simulation *simPtr, int genIndex);
 
-    printf("Rule %i | %ix%i | %s | %i initial live cells spaced %s\n",
+    printf("Rule %i | %ix%i | %s borders | %i initial live cells spaced %s\n",
         simPtr->rule,
         simPtr->habitatSize,
         simPtr->genBufferSize,
