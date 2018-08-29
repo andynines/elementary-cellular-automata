@@ -10,12 +10,6 @@ MIT License
 
 
 
-// Includes
-
-#include <stdbool.h>
-
-
-
 // Constants
 
 #define BLOCK_BYTES (sizeof(CellBlock))

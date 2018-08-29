@@ -4,7 +4,7 @@ Copyright (c) 2018 andynines
 MIT License
 */
 
-// Includes TODO: Check for unnecessary ones
+// Includes
 
 #include <ctype.h>
 #include <limits.h>
