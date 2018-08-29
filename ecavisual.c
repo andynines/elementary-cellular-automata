@@ -8,6 +8,10 @@ MIT License
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+
+#include "eca.h"
+#include "ecaargs.h"
 
 #include "SDL.h"
 
@@ -23,7 +27,8 @@ MIT License
 // Creating window
 
 void showError(char* errorMessage) {
-    printf("%s\n%s\n", errorMessage, SDL_GetError());
+    // Write SDL error to terminal
+    fprintf(stderr, "%s\n%s\n", errorMessage, SDL_GetError());
 }
 
 
@@ -35,12 +40,17 @@ int main(int argc, char* args[]) {
     SDL_Window* window;
     SDL_Surface* screenSurface;
 
+    extern Simulation* createUserSim(int argc, char* argv[]);
+    extern void iterateSim(Simulation* simPtr, int iterations);
+    extern void destorySim(Simulation* simPtr);
+
     active = true;
     window = NULL;
     screenSurface = NULL;
     
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         showError("Could not initialize");
+        return EXIT_FAILURE;
     } else {
         window = SDL_CreateWindow("Elementary Cellular Automata Simulator",
                                   SDL_WINDOWPOS_UNDEFINED,
@@ -50,12 +60,13 @@ int main(int argc, char* args[]) {
                                   SDL_WINDOW_SHOWN);
         if (window == NULL) {
             showError("Could not create window");
+            return EXIT_FAILURE;
         } else {
             screenSurface = SDL_GetWindowSurface(window);
             SDL_FillRect(screenSurface,
                          NULL,
                          SDL_MapRGB(screenSurface->format,
-                         0xFF, 0xFF, 0xFF));
+                                    0xFF, 0xFF, 0xFF));
             SDL_UpdateWindowSurface(window);
             while (active) {
                 while (SDL_PollEvent(&eventHandler) != 0) {
@@ -70,5 +81,5 @@ int main(int argc, char* args[]) {
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    return 0;
+    return EXIT_SUCCESS;
 }

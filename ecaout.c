@@ -56,12 +56,13 @@ void simOut(Simulation* simPtr) {
 
     void genOut(Simulation *simPtr, int genIndex);
 
-    printf("Rule %i | %ix%i | %s borders | %i initial live cells spaced %s\n",
+    printf("Rule %i | %ix%i | %s borders | %i initial live cell%sspaced %s\n",
         simPtr->rule,
         simPtr->habitatSize,
         simPtr->genBufferSize,
         borders[simPtr->borderType],
         simPtr->initCode.aliveReq,
+        (simPtr->initCode.aliveReq > 1)? "s " : " ",
         spacings[simPtr->initCode.spacing]);
 
     for (genIndex = 0; genIndex < (simPtr->genBufferSize); ++genIndex) {
