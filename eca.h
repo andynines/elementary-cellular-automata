@@ -65,6 +65,8 @@ Simulation* createSim(int rule,
                       BoundaryCode borderType,
                       ConfigCode initCode);
 
+bool getCellState(CellBlock* intlBlockPtr, int cellIndex);
+
 void iterateSim(Simulation* simPtr, int iterations);
 
 void destroySim(Simulation* simPtr);

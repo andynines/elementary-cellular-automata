@@ -18,6 +18,30 @@ MIT License
 
 // Functions for reading and writing simulation data
 
+static void copyGen(CellBlock* sourceIntlPtr, CellBlock* targetIntlPtr, int blockReq) {
+    // Copy one generation's cells to another
+    int blockIndex;
+
+    for (blockIndex = 0; blockIndex < blockReq; ++blockIndex) {
+        targetIntlPtr[blockIndex] = sourceIntlPtr[blockIndex];
+    }
+}
+
+
+
+static bool determineEvoState(int rule, int cellNeighborhood) {
+    // Given a cell's neighborhood, determine its state in the next generation
+    int bitMask;
+    bool cellState;
+
+    bitMask = 1 << cellNeighborhood;
+    cellState = rule & bitMask;
+
+    return cellState;
+}
+
+
+
 static CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex) {
     // Return pointer to the CellBlock containing the cell at cellIndex
     int blockIndex;
@@ -31,31 +55,23 @@ static CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex) {
 
 
 
-static bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
-    // Determine whether cell at index is alive or dead
-    CellBlock* blockPtr;
+static void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state) {
+    // Set an individual cell at a certain location to alive or dead
     int localCellIndex;
+    CellBlock* targetBlockPtr;
     CellBlock bitMask;
-    bool cellState;
 
     CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex);
 
-    blockPtr = getContainerBlock(intlBlockPtr, cellIndex);
+    targetBlockPtr = getContainerBlock(intlBlockPtr, cellIndex);
     localCellIndex = cellIndex % BLOCK_BITS;
     bitMask = 1 << (BLOCK_BITS - localCellIndex - 1);
-    cellState = *blockPtr & bitMask;
 
-    return cellState;
-}
-
-
-
-static void copyGen(CellBlock* sourceIntlPtr, CellBlock* targetIntlPtr, int blockReq) {
-    // Copy one generation's cells to another
-    int blockIndex;
-
-    for (blockIndex = 0; blockIndex < blockReq; ++blockIndex) {
-        targetIntlPtr[blockIndex] = sourceIntlPtr[blockIndex];
+    if (state) {
+        *targetBlockPtr |= bitMask;
+    } else {
+        bitMask = ~bitMask;
+        *targetBlockPtr &= bitMask;
     }
 }
 
@@ -105,41 +121,6 @@ static int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellInd
 
 
 
-static bool determineEvoState(int rule, int cellNeighborhood) {
-    // Given a cell's neighborhood, determine its state in the next generation
-    int bitMask;
-    bool cellState;
-
-    bitMask = 1 << cellNeighborhood;
-    cellState = rule & bitMask;
-
-    return cellState;
-}
-
-
-
-static void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state) {
-    // Set an individual cell at a certain location to alive or dead
-    int localCellIndex;
-    CellBlock* targetBlockPtr;
-    CellBlock bitMask;
-
-    CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex);
-
-    targetBlockPtr = getContainerBlock(intlBlockPtr, cellIndex);
-    localCellIndex = cellIndex % BLOCK_BITS;
-    bitMask = 1 << (BLOCK_BITS - localCellIndex - 1);
-
-    if (state) {
-        *targetBlockPtr |= bitMask;
-    } else {
-        bitMask = ~bitMask;
-        *targetBlockPtr &= bitMask;
-    }
-}
-
-
-
 static void rotateCells(Simulation* simPtr, int genIndex, int rotVector) {
     // Rotate cells in the specified direction; positive vectors move right
     Generation tempGen;
@@ -164,7 +145,7 @@ static void rotateCells(Simulation* simPtr, int genIndex, int rotVector) {
 
     free(tempGen.blockArr);
 }
-    
+
 
 
 // Generation initialization methods
@@ -254,7 +235,7 @@ static void initGen(Simulation* simPtr, int genIndex) {
 
 
 
-// Functions for operating simulations
+// Functions for operating and outputting simulations
 
 Simulation* createSim(int rule,
                       int habitatSize,
@@ -296,6 +277,25 @@ Simulation* createSim(int rule,
     }
 
     return newSimPtr;
+}
+
+
+
+bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
+    // Determine whether cell at index is alive or dead
+    CellBlock* blockPtr;
+    int localCellIndex;
+    CellBlock bitMask;
+    bool cellState;
+
+    CellBlock* getContainerBlock(CellBlock* intlBlockPtr, int cellIndex);
+
+    blockPtr = getContainerBlock(intlBlockPtr, cellIndex);
+    localCellIndex = cellIndex % BLOCK_BITS;
+    bitMask = 1 << (BLOCK_BITS - localCellIndex - 1);
+    cellState = *blockPtr & bitMask;
+
+    return cellState;
 }
 
 
