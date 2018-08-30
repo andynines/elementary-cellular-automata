@@ -27,7 +27,7 @@ static void infoStr(Simulation* simPtr) {
            simPtr->genBufferSize,
            borders[simPtr->borderType],
            simPtr->initCode.aliveReq,
-           (simPtr->initCode.aliveReq == 1)? "s " : " ",
+           (simPtr->initCode.aliveReq == 1)? " " : "s ",
            spacings[simPtr->initCode.spacing]);
 }
 
