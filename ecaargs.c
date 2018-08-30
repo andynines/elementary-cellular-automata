@@ -68,8 +68,8 @@ static bool stageStrArg(char* arg, int matches, char* mustMatch[matches], int* w
 
 // Argument processing routine
 
-static void usage(char* execName) {
-    // Output usage message
+static Simulation* usage(char* execName) {
+    // Output usage message and return a null sim pointer
     fprintf(stderr,
             "Usage: %s rule habitat-width buffer-height boundary-type cells-alive spacing\n"
             "\n"
@@ -80,6 +80,8 @@ static void usage(char* execName) {
             "cells-alive:       integer from 0 to habitat-width\n"
             "spacing:           even, random\n",
             execName);
+
+    return (Simulation*) 0;
 }
 
 
@@ -96,7 +98,7 @@ Simulation* createUserSim(int argc, char* argv[]) {
     char* boundaryTypeArgs[] = {"wrap", "dead", "alive"};
     char* spacingArgs[] = {"even", "random"};
 
-    void usage(char* execName);
+    Simulation* usage(char* execName);
     bool stageIntArg(char* arg, int minVal, int maxVal, int* writeToPtr);
     bool stageStrArg(char* arg, int matches, char* mustMatch[matches], int* writeToPtr);
     extern Simulation* createSim(int rule,
@@ -106,8 +108,7 @@ Simulation* createUserSim(int argc, char* argv[]) {
                                  ConfigCode initCode);
 
     if (argc != TOTAL_ARGC) {
-        usage(argv[0]);
-        return (Simulation*) 0;
+        return usage(argv[0]);
     }
 
     bool argBuffer[ECA_ARGC] = {
@@ -120,8 +121,7 @@ Simulation* createUserSim(int argc, char* argv[]) {
     
     for (bufferIndex = 0; bufferIndex < ECA_ARGC; ++bufferIndex) {
         if (!argBuffer[bufferIndex]) {
-            usage(argv[0]);
-            return (Simulation*) 0;
+            return usage(argv[0]);
         }
     }
 

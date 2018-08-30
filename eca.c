@@ -85,7 +85,7 @@ static int extractCellNeighborhood(Simulation* simPtr, int genIndex, int cellInd
     bool wrapOccurred;
     bool currentCellState;
 
-    extern bool wrap(int* n, int  nMax);
+    extern bool wrap(int* n, int nMax);
     bool getCellState(CellBlock* intlBlockPtr, int cellIndex);
 
     --cellIndex; // Begin with left neighbor of desired cell
