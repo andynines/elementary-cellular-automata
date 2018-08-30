@@ -16,6 +16,23 @@ MIT License
 
 // Printing algorithms
 
+static void infoStr(Simulation* simPtr) {
+    // Print a line of text summarizing simulation configuration
+    char* const borders[] = {"Wrapped", "Dead", "Live"};
+    char* const spacings[] = {"evenly", "randomly"};
+
+    printf("Rule %i | %ix%i | %s borders | %i initial live cell%sspaced %s\n",
+           simPtr->rule,
+           simPtr->habitatSize,
+           simPtr->genBufferSize,
+           borders[simPtr->borderType],
+           simPtr->initCode.aliveReq,
+           (simPtr->initCode.aliveReq == 1)? "s " : " ",
+           spacings[simPtr->initCode.spacing]);
+}
+
+
+
 void genOut(Simulation* simPtr, int genIndex) {
     // Print text representation of a single generation to stdout
     CellBlock* currentBlockPtr;
@@ -51,20 +68,10 @@ void simOut(Simulation* simPtr) {
     // Output the entirety of a simulation's generation buffer
     int genIndex;
 
-    char* const borders[] = {"Wrapped", "Dead", "Live"};
-    char* const spacings[] = {"evenly", "randomly"};
-
+    void infoStr(Simulation* simPtr);
     void genOut(Simulation *simPtr, int genIndex);
-
-    printf("Rule %i | %ix%i | %s borders | %i initial live cell%sspaced %s\n",
-        simPtr->rule,
-        simPtr->habitatSize,
-        simPtr->genBufferSize,
-        borders[simPtr->borderType],
-        simPtr->initCode.aliveReq,
-        (simPtr->initCode.aliveReq > 1)? "s " : " ",
-        spacings[simPtr->initCode.spacing]);
-
+   
+    infoStr(simPtr);
     for (genIndex = 0; genIndex < (simPtr->genBufferSize); ++genIndex) {
         genOut(simPtr, genIndex);
     }
