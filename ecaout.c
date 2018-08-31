@@ -16,24 +16,7 @@ MIT License
 
 // Printing algorithms
 
-static void infoStr(Simulation* simPtr) {
-    // Print a line of text summarizing simulation configuration
-    char* const borders[] = {"Wrapped", "Dead", "Live"};
-    char* const spacings[] = {"evenly", "randomly"};
-
-    printf("Rule %i | %ix%i | %s borders | %i initial live cell%sspaced %s\n",
-           simPtr->rule,
-           simPtr->habitatSize,
-           simPtr->genBufferSize,
-           borders[simPtr->borderType],
-           simPtr->initCode.aliveReq,
-           (simPtr->initCode.aliveReq == 1)? " " : "s ",
-           spacings[simPtr->initCode.spacing]);
-}
-
-
-
-void genOut(Simulation* simPtr, int genIndex) {
+static void genOut(Simulation* simPtr, int genIndex) {
     // Print text representation of a single generation to stdout
     CellBlock* currentBlockPtr;
     CellBlock bitMask;
@@ -60,6 +43,23 @@ void genOut(Simulation* simPtr, int genIndex) {
     }
 
     putchar('\n');
+}
+
+
+
+void infoStr(Simulation* simPtr) {
+    // Print a line of text summarizing simulation configuration
+    char* const borders[] = {"Wrapped", "Dead", "Live"};
+    char* const spacings[] = {"evenly", "randomly"};
+
+    printf("Rule %i | %ix%i | %s borders | %i initial live cell%sspaced %s\n",
+           simPtr->rule,
+           simPtr->habitatSize,
+           simPtr->genBufferSize,
+           borders[simPtr->borderType],
+           simPtr->initCode.aliveReq,
+           (simPtr->initCode.aliveReq == 1)? " " : "s ",
+           spacings[simPtr->initCode.spacing]);
 }
 
 

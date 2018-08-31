@@ -27,7 +27,7 @@ typedef enum {
 
 // Function declarations
 
-void genOut(Simulation* simPtr, int genIndex);
+void infoStr(Simulation* simPtr);
 
 void simOut(Simulation* simPtr);
 
