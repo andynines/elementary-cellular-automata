@@ -14,7 +14,7 @@ MIT License
 #include "fracs.h"
 #include "utils.h"
 
-// TODO: Test all uses of free() with Valgrind
+
 
 // Functions for reading and writing simulation data
 
@@ -261,7 +261,7 @@ Simulation* createSim(int rule,
     newSimPtr->initCode = initCode;
 
     // Calculate number of CellBlocks needed to store one generation of data
-    blockReq = (BLOCK_BITS + habitatSize - 1) / BLOCK_BITS;
+    blockReq = (BLOCK_BITS + habitatSize - 1) / BLOCK_BITS; // Ceiling division
     newSimPtr->blockReq = blockReq;
 
     // Allocate memory to store specified number of generations in buffer
@@ -319,7 +319,7 @@ void iterateSim(Simulation* simPtr, int iterations) {
 
     for (; iterations > 0; --iterations) {
         targetGenIndex = min((simPtr->age) + 1, maxGenIndex);
-        // If buffer is full, shift every gen back and truncate the oldest
+        // If buffer is full, shift every gen back and overwrite the oldest
         if ((simPtr->age) > maxGenIndex) {
             for (genIndex = 0; genIndex < maxGenIndex; ++genIndex) {
                 copyGen(simPtr->genArr[genIndex + 1].blockArr,
