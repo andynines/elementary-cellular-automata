@@ -16,8 +16,8 @@ all: ecaterm ecavisual
 ecaterm: ecaterm.o eca.o ecaout.o ecaargs.o fracs.o utils.o
 	$(cc) $(cflags) -o ecaterm ecaterm.o eca.o ecaout.o ecaargs.o fracs.o utils.o
 
-ecavisual: ecavisual.o eca.o ecaargs.o fracs.o utils.o
-	$(cc) $(cflags) -o ecavisual ecavisual.o eca.o ecaargs.o fracs.o utils.o -lSDL2
+ecavisual: ecavisual.o eca.o ecaout.o ecaargs.o fracs.o utils.o
+	$(cc) $(cflags) -o ecavisual ecavisual.o eca.o ecaout.o ecaargs.o fracs.o utils.o -lSDL2
 
 ecaterm.o: ecaterm.c
 	$(cc) $(cflags) -c ecaterm.c
