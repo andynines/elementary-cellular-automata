@@ -9,7 +9,7 @@ cflags = -Wall -std=c99
 
 
 
-# Recipes
+# Compilation recipes
 
 all: ecaterm ecavisual
 
@@ -40,6 +40,17 @@ fracs.o: fracs.c fracs.h
 utils.o: utils.c utils.h
 	$(cc) $(cflags) -c utils.c
 
-.PHONY: clean
+
+
+# Utility recipies
+
+test:
+	./ecaterm 30 80 25 wrap 1 even # Attempting to draw rule 30 to terminal
+
+.PHONY: clean purge
+
 clean:
-	-rm *.o ecaterm ecavisual
+	-rm *.o
+
+purge: clean
+	rm ecaterm ecavisual
