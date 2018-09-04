@@ -214,14 +214,10 @@ static void probabilisticFill(Simulation* simPtr, int genIndex, int aliveReq) {
 
 
 
-static void initGen(Simulation* simPtr, int genIndex) {
+static void initGen(Simulation* simPtr, int genIndex, ConfigCode initCode) {
     // Initialize a generation with some specified configuration
-    ConfigCode initCode;
-
     void orderlyFill(Simulation* simPtr, int genIndex, int aliveReq);
     void probabilisticFill(Simulation* simPtr, int genIndex, int aliveReq);
-
-    initCode = simPtr->initCode;
 
     switch (initCode.spacing) {
         case EVEN:
@@ -247,7 +243,7 @@ Simulation* createSim(int rule,
     int blockReq;
     int genIndex;
 
-    void initGen(Simulation* simPtr, int genIndex);
+    void initGen(Simulation* simPtr, int genIndex, ConfigCode initCode);
 
     srand(time(0));
 
@@ -270,10 +266,10 @@ Simulation* createSim(int rule,
         newSimPtr->genArr[genIndex].blockArr = (CellBlock*) malloc(BLOCK_BYTES * blockReq);
     }
 
-    initGen(newSimPtr, 0); // Set up specified initial configuration
+    initGen(newSimPtr, 0, initCode); // Set up specified initial configuration
     for (genIndex = 1; genIndex < genBufferSize; ++genIndex) {
         // Set all the cells in every other generation of the buffer to dead
-        initGen(newSimPtr, genIndex);
+        initGen(newSimPtr, genIndex, (ConfigCode) {.aliveReq = 0, .spacing = EVEN});
     }
 
     return newSimPtr;
