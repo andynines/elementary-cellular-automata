@@ -44,7 +44,7 @@ utils.o: utils.c utils.h
 
 # Utility recipies
 
-test:
+test: ecaterm
 	./ecaterm 30 80 25 wrap 1 even # Attempting to draw rule 30 to terminal
 
 .PHONY: clean purge
