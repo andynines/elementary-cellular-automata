@@ -34,11 +34,13 @@ typedef enum {
 
 // Function declarations
 
+Simulation* createUserSim(int argc, char* argv[]);
+
 void infoStr(Simulation* simPtr);
 
-void simOut(Simulation* simPtr);
+void genOut(Simulation* simPtr, int genIndex); 
 
-Simulation* createUserSim(int argc, char* argv[]);
+void simOut(Simulation* simPtr);
 
 
 
