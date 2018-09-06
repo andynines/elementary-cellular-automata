@@ -1,18 +1,25 @@
 /*
-ecaout.h
+ecaio.h
 Copyright (c) 2018 andynines
 MIT License
 */
 
-#ifndef ECAOUT_H
+#ifndef ECAIO_H
 
-#define ECAOUT_H
+#define ECAIO_H
 
 
 
 // Includes
 
 #include "eca.h"
+
+
+
+// Constants
+
+#define TOTAL_ARGC (7)
+#define ECA_ARGC (TOTAL_ARGC - 1)
 
 
 
@@ -30,6 +37,8 @@ typedef enum {
 void infoStr(Simulation* simPtr);
 
 void simOut(Simulation* simPtr);
+
+Simulation* createUserSim(int argc, char* argv[]);
 
 
 

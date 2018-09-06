@@ -13,11 +13,11 @@ cflags = -Wall -std=c99
 
 all: ecaterm ecavisual
 
-ecaterm: ecaterm.o eca.o ecaout.o ecaargs.o fracs.o utils.o
-	$(cc) $(cflags) -o ecaterm ecaterm.o eca.o ecaout.o ecaargs.o fracs.o utils.o
+ecaterm: ecaterm.o eca.o ecaio.o fracs.o utils.o
+	$(cc) $(cflags) -o ecaterm ecaterm.o eca.o ecaio.o fracs.o utils.o
 
-ecavisual: ecavisual.o eca.o ecaout.o ecaargs.o fracs.o utils.o
-	$(cc) $(cflags) -o ecavisual ecavisual.o eca.o ecaout.o ecaargs.o fracs.o utils.o -lSDL2
+ecavisual: ecavisual.o eca.o ecaio.o fracs.o utils.o
+	$(cc) $(cflags) -o ecavisual ecavisual.o eca.o ecaio.o fracs.o utils.o -lSDL2
 
 ecaterm.o: ecaterm.c
 	$(cc) $(cflags) -c ecaterm.c
@@ -28,11 +28,8 @@ ecavisual.o: ecavisual.c
 eca.o: eca.c eca.h
 	$(cc) $(cflags) -c eca.c
 
-ecaout.o: ecaout.c ecaout.h
-	$(cc) $(cflags) -c ecaout.c
-
-ecaargs.o: ecaargs.c ecaargs.h
-	$(cc) $(cflags) -c ecaargs.c
+ecaio.o: ecaio.c ecaio.h
+	$(cc) $(cflags) -c ecaio.c
 
 fracs.o: fracs.c fracs.h
 	$(cc) $(cflags) -c fracs.c

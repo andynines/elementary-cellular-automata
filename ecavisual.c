@@ -11,8 +11,7 @@ MIT License
 #include <stdlib.h>
 
 #include "eca.h"
-#include "ecaargs.h"
-#include "ecaout.h"
+#include "ecaio.h"
 
 #include "SDL.h"
 
@@ -76,7 +75,7 @@ Drawing* createDrawing(Simulation* simPtr) {
     Drawing* newDrawingPtr;
 
     newDrawingPtr = (Drawing*) malloc(sizeof(Drawing));
-    //TODO: Change method of working with ecaargs so args are specified by caller
+    
     newDrawingPtr->xStretch = SCREEN_WIDTH / (simPtr->habitatSize);
     newDrawingPtr->yStretch = SCREEN_HEIGHT / (simPtr->genBufferSize);
 

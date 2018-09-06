@@ -9,8 +9,7 @@ MIT License
 #include <stdlib.h>
 
 #include "eca.h"
-#include "ecaargs.h"
-#include "ecaout.h"
+#include "ecaio.h"
 
 
 
