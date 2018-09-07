@@ -184,10 +184,8 @@ void simOut(Simulation* simPtr) {
     // Output the entirety of a simulation's generation buffer
     int genIndex;
 
-    void infoStr(Simulation* simPtr);
     void genOut(Simulation *simPtr, int genIndex);
    
-    infoStr(simPtr);
     for (genIndex = 0; genIndex < (simPtr->genBufferSize); ++genIndex) {
         genOut(simPtr, genIndex);
     }
