@@ -316,7 +316,7 @@ void iterateSim(Simulation* simPtr, int iterations) {
     for (; iterations > 0; --iterations) {
         targetGenIndex = min((simPtr->age) + 1, maxGenIndex);
         // If buffer is full, shift every gen back and overwrite the oldest
-        if ((simPtr->age) > maxGenIndex) {
+        if ((simPtr->age) >= maxGenIndex) {
             for (genIndex = 0; genIndex < maxGenIndex; ++genIndex) {
                 copyGen(simPtr->genArr[genIndex + 1].blockArr,
                         simPtr->genArr[genIndex].blockArr,
