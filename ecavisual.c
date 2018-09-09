@@ -23,8 +23,8 @@ MIT License
 
 #define WINDOW_TITLE ("ECA Visual")
 
-#define SCREEN_WIDTH (1000)
-#define SCREEN_HEIGHT (750)
+#define SCREEN_WIDTH (480)
+#define SCREEN_HEIGHT (360)
 
 #define BACKGROUND_R (0xFF)
 #define BACKGROUND_G (0xFF)
@@ -436,16 +436,15 @@ int operateApp(App* appPtr) {
     initDrawing(appPtr);
 
     while (appPtr->active) {
-        while (SDL_PollEvent(&(appPtr->event)) != 0) {
-            if (appPtr->event.type == SDL_QUIT) {
-                appPtr->active = false;
-            } else if (appPtr->event.type == SDL_KEYDOWN) {
-                if (appPtr->event.key.keysym.sym == SDLK_SPACE) {
-                    iterateDrawing(appPtr);
-                }
+        draw(appPtr);
+        SDL_WaitEvent(&(appPtr->event));
+        if (appPtr->event.type == SDL_QUIT) {
+            appPtr->active = false;
+        } else if (appPtr->event.type == SDL_KEYDOWN) {
+            if (appPtr->event.key.keysym.sym == SDLK_SPACE) {
+                iterateDrawing(appPtr);
             }
         }
-        draw(appPtr);
     }
     
     SDL_Quit();
