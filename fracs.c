@@ -8,6 +8,7 @@ MIT License
 
 #include <stdlib.h>
 
+#include "allocs.h"
 #include "fracs.h"
 
 
@@ -33,7 +34,7 @@ Fraction* createFrac(int num, int denom) {
     // Create a new fraction structure
     Fraction* newFracPtr;
 
-    newFracPtr = (Fraction*) malloc(sizeof(Fraction));
+    newFracPtr = (Fraction*) safeMalloc(sizeof(Fraction));
     newFracPtr->num = num;
     newFracPtr->denom = denom;
 

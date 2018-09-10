@@ -12,12 +12,12 @@ MIT License
 
 #include "eca.h"
 #include "ecaio.h"
+#include "allocs.h"
 #include "utils.h"
 
 #include "SDL.h"
 
 // TODO: Test with Valgrind memcheck
-// TODO: Introduce safe mallocs
 
 // Constants
 
@@ -78,7 +78,7 @@ RectNode* createNode(Drawing* drawingPtr, int rowIndex, int colIndex) {
     // Create a new RectNode struct
     RectNode* newNodePtr;
 
-    newNodePtr = (RectNode*) malloc(sizeof(RectNode));
+    newNodePtr = (RectNode*) safeMalloc(sizeof(RectNode));
     newNodePtr->cellRect = (SDL_Rect) {colIndex * (drawingPtr->xStretch),
                                        rowIndex * (drawingPtr->yStretch),
                                        drawingPtr->xStretch,
@@ -228,14 +228,14 @@ Drawing* createDrawing(Simulation* simPtr) {
     // Allocate memory to store SDL drawing information
     Drawing* newDrawingPtr;
 
-    newDrawingPtr = (Drawing*) malloc(sizeof(Drawing));
+    newDrawingPtr = (Drawing*) safeMalloc(sizeof(Drawing));
     
     newDrawingPtr->age = 0;
     newDrawingPtr->xStretch = SCREEN_WIDTH / (simPtr->habitatSize);
     newDrawingPtr->yStretch = SCREEN_HEIGHT / (simPtr->genBufferSize);
     newDrawingPtr->background = (SDL_Rect) {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
-    newDrawingPtr->rowArr = (RectRow*) malloc(sizeof(RectRow) * (simPtr->genBufferSize));
+    newDrawingPtr->rowArr = (RectRow*) safeMalloc(sizeof(RectRow) * (simPtr->genBufferSize));
 
     return newDrawingPtr;
 }
@@ -304,7 +304,7 @@ App* createApp(Simulation* simPtr, Drawing* drawingPtr) {
 
     App* errorSDL(char* errorMessage);
 
-    newAppPtr = (App*) malloc(sizeof(App));
+    newAppPtr = (App*) safeMalloc(sizeof(App));
 
     newAppPtr->active = true;
     newAppPtr->windowPtr = NULL;
@@ -405,13 +405,13 @@ void resizeSim(Simulation* simPtr, int habitatSize, int genBufferSize) {
     int blockReq;
     CellBlock* currentBlockPtr;
 
-    simPtr->genArr = realloc(simPtr->genArr, sizeof(Generation) * SCREEN_HEIGHT);
+    simPtr->genArr = safeRealloc(simPtr->genArr, sizeof(Generation) * SCREEN_HEIGHT);
     simPtr->genBufferSize = genBufferSize;
 
     blockReq = (BLOCK_BITS + SCREEN_WIDTH - 1) / BLOCK_BITS; // Ceiling division
     for (genIndex = 0; genIndex < genBufferSize; ++genIndex) {
         currentBlockPtr = simPtr->genArr[genIndex].blockArr;
-        simPtr->genArr[genIndex].blockArr = realloc(currentBlockPtr, BLOCK_BYTES * blockReq);
+        simPtr->genArr[genIndex].blockArr = safeRealloc(currentBlockPtr, BLOCK_BYTES * blockReq);
     }
     simPtr->habitatSize = habitatSize;
 

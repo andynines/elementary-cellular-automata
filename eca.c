@@ -11,6 +11,7 @@ MIT License
 #include <time.h>
 
 #include "eca.h"
+#include "allocs.h"
 #include "fracs.h"
 #include "utils.h"
 
@@ -133,7 +134,7 @@ static void rotateCells(Simulation* simPtr, int genIndex, int rotVector) {
     bool getCellState(CellBlock* intlBlockPtr, int cellIndex);
     void setCell(CellBlock* intlBlockPtr, int cellIndex, bool state);
 
-    tempGen.blockArr = (CellBlock*) malloc(BLOCK_BYTES * (simPtr->blockReq));
+    tempGen.blockArr = (CellBlock*) safeMalloc(BLOCK_BYTES * (simPtr->blockReq));
     copyGen(simPtr->genArr[genIndex].blockArr, tempGen.blockArr, simPtr->blockReq);
     
     for (cellIndex = 0; cellIndex < (simPtr->habitatSize); ++cellIndex) {
@@ -247,7 +248,7 @@ Simulation* createSim(int rule,
 
     srand(time(0));
 
-    newSimPtr = (Simulation*) malloc(sizeof(Simulation));
+    newSimPtr = (Simulation*) safeMalloc(sizeof(Simulation));
     newSimPtr->age = 0;
     // Set variables specified by the user
     newSimPtr->rule = rule;
@@ -261,9 +262,9 @@ Simulation* createSim(int rule,
     newSimPtr->blockReq = blockReq;
 
     // Allocate memory to store specified number of generations in buffer
-    newSimPtr->genArr = (Generation*) malloc(sizeof(Generation) * genBufferSize);
+    newSimPtr->genArr = (Generation*) safeMalloc(sizeof(Generation) * genBufferSize);
     for (genIndex = 0; genIndex < genBufferSize; ++genIndex) {
-        newSimPtr->genArr[genIndex].blockArr = (CellBlock*) malloc(BLOCK_BYTES * blockReq);
+        newSimPtr->genArr[genIndex].blockArr = (CellBlock*) safeMalloc(BLOCK_BYTES * blockReq);
     }
 
     initGen(newSimPtr, 0, initCode); // Set up specified initial configuration
