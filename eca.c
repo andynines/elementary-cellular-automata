@@ -1,5 +1,8 @@
 /*
 eca.c
+
+Space-efficient elementary cellular automaton simulation library.
+
 Copyright (c) 2018 andynines
 MIT License
 */
@@ -232,14 +235,20 @@ static void initGen(Simulation* simPtr, int genIndex, ConfigCode initCode) {
 
 
 
-// Functions for operating and outputting simulations
+// Functions for operating simulations
 
 Simulation* createSim(int rule,
                       int habitatSize,
                       int genBufferSize,
                       BoundaryCode borderType,
                       ConfigCode initCode) {
-    // Create a new simulation and initialize its data structures
+    /*
+    Given a rule from Wolfram's numbering scheme, a number of cells belonging to
+    a single generation, a number of generations to store on memory, a method of
+    interpreting the neighborhoods of edge cells, and a code specifying how the
+    initial generation should be populated, build a simulation according to 
+    these attributes and return a pointer to it.
+    */
     Simulation* newSimPtr;
     int blockReq;
     int genIndex;
@@ -279,7 +288,12 @@ Simulation* createSim(int rule,
 
 
 bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
-    // Determine whether cell at index is alive or dead
+    /*
+    Locate a particular cell bit based off of a pointer to its generation's
+    memory block and its index relative to that entire generation. Return a
+    boolean representing the cell's state; live cells return true and dead cells
+    return false.
+    */
     CellBlock* blockPtr;
     int localCellIndex;
     CellBlock bitMask;
@@ -298,7 +312,11 @@ bool getCellState(CellBlock* intlBlockPtr, int cellIndex) {
 
 
 void iterateSim(Simulation* simPtr, int iterations) {
-    // Calculate the next state of a simulation and manage the buffer
+    /*
+    Knowing the latest states of each cell in a simulation, calculate their next
+    state. Place the resulting new generation in the buffer, deleting the oldest
+    generation in the buffer if necassary in order to make room.
+    */
     int maxGenIndex;
     int targetGenIndex;
     int genIndex;
@@ -336,7 +354,9 @@ void iterateSim(Simulation* simPtr, int iterations) {
 
 
 void destroySim(Simulation* simPtr) {
-    // Completely remove a simulation's data from memory
+    /*
+    Remove a simulation's data from memory using its pointer.
+    */
     int genIndex;
 
     for (genIndex = 0; genIndex < (simPtr->genBufferSize); ++genIndex) {

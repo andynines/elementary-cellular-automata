@@ -1,5 +1,9 @@
 /*
 allocs.c
+
+Wrappers for standard memory allocation functions that check for allocation 
+failures.
+
 Copyright (c) 2018 andynines
 MIT License
 */
@@ -28,7 +32,11 @@ static void* testMemBlock(void* memBlockPtr) {
 // Memory allocation function wrappers
 
 void* safeMalloc(size_t size) {
-    // Allocate requested amount of memory if space is available, and return pointer to block
+    /*
+    Receive a number of bytes, and attempt to allocate a memory block of that
+    size. Return a pointer to the new block of memory so long as the 
+    allocation succeeds. Program exits upon failure.
+    */
     void* memBlockPtr;
 
     void* testMemBlock(void* memBlockPtr);
@@ -40,7 +48,11 @@ void* safeMalloc(size_t size) {
 
 
 void* safeRealloc(void* memBlockPtr, size_t size) {
-    // Reallocate a block of memory to the requested size, or return null pointe if impossible
+    /*
+    Receive a pointer to a block of memory and a number of bytes. Attempt to
+    resize the memory block to the specified size and return a pointer to the
+    resized block of memory if allocation succeeds. Program exits upon failure.
+    */
     void* newBlockPtr;
 
     void* testMemBlock(void* memBlockPtr);

@@ -1,5 +1,8 @@
 /*
 fracs.c
+
+Methods for working with structures meant to represent mathematical fractions.
+
 Copyright (c) 2018 andynines
 MIT License
 */
@@ -31,7 +34,11 @@ static int gcd(int a, int b) {
 
 
 Fraction* createFrac(int num, int denom) {
-    // Create a new fraction structure
+    /*
+    Given a numerator and denominator, allocate the space to store these ints in
+    a fraction "object" for further calculations. Return a pointer to the new 
+    structure.
+    */
     Fraction* newFracPtr;
 
     newFracPtr = (Fraction*) safeMalloc(sizeof(Fraction));
@@ -44,7 +51,10 @@ Fraction* createFrac(int num, int denom) {
 
 
 void simplifyFrac(Fraction* fracPtr) {
-    // Reduce a fraction to the simplest numbers that make its ratio
+    /*
+    Given a pointer to a fraction structure, reduce its numerator and 
+    denominator down to their simplest form.
+    */
     int currentGcd;
 
     int gcd(int a, int b);
@@ -58,6 +68,9 @@ void simplifyFrac(Fraction* fracPtr) {
 
 
 void destroyFrac(Fraction* fracPtr) {
-    // Remove a fraction from memory
+    /*
+    Wrap the standard deallocation method for completeness. Free the fraction
+    structure pointed to by the argument.
+    */
     free(fracPtr);
 }

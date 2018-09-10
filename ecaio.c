@@ -1,5 +1,9 @@
 /*
 ecaio.h
+
+Methods for reading in arguments that specify different attributes of a 
+simulation, and outputting text representations of simulations in the terminal.
+
 Copyright (c) 2018 andynines
 MIT License
 */
@@ -87,7 +91,13 @@ static Simulation* usage(char* execName) {
 
 
 Simulation* createUserSim(int argc, char* argv[]) {
-    // If all arguments are valid, return pointer to new simulation
+    /*
+    This method wraps the createSim method in eca.c, reading in an argument 
+    vector and extracting its inforation in order to create a simulation 
+    specified by a user on the command line. If all arguments are acceptable,
+    it passes back the pointer received from the sim creator. Otherwise, it
+    displays a usage message.
+    */
     int rule;
     int habitatSize;
     int genBufferSize;
@@ -133,7 +143,10 @@ Simulation* createUserSim(int argc, char* argv[]) {
 // Printing algorithms
 
 void infoStr(Simulation* simPtr) {
-    // Print a line of text summarizing simulation configuration
+    /*
+    Uses the information from a simulation pointer to print a formatted string
+    containing relevant information about that simulation.
+    */
     char* const borders[] = {"Wrapped", "Dead", "Live"};
     char* const spacings[] = {"evenly", "randomly"};
 
@@ -150,7 +163,11 @@ void infoStr(Simulation* simPtr) {
 
 
 void genOut(Simulation* simPtr, int genIndex) {
-    // Print text representation of a single generation to stdout
+    /*
+    Reads the data contained in a simulation at the specified index in the 
+    generation buffer. Prints a line of text, each character of which represents
+    a live or dead cell according to the OutChar enum in ecaio.h.
+    */
     CellBlock* currentBlockPtr;
     CellBlock bitMask;
     int cellIndex;
@@ -181,7 +198,10 @@ void genOut(Simulation* simPtr, int genIndex) {
 
 
 void simOut(Simulation* simPtr) {
-    // Output the entirety of a simulation's generation buffer
+    /*
+    Wraps the genOut method in order to print every generation in the buffer of 
+    a given simulation, printing the oldest buffer line first.
+    */
     int genIndex;
 
     void genOut(Simulation *simPtr, int genIndex);
