@@ -25,7 +25,7 @@ Use the included `Makefile` to build the two included applications.
 + `make`, `make all`: Build both applications.
 + `make ecaterm`, `make ecavisual`: Build specific application.
 + `make test`: Do a test run with `ecaterm`. A successful test looks like this:
-![alt text](../blob/master/media/successful-test.png "Successful test")
+![Successful test](media/successful-test.png "Successful test")
 + `make clean`: Remove all object files created during the compilation process.
 + `make purge`: Deconstruct the project; remove all object files and executable files.
 
@@ -49,15 +49,15 @@ spacing:           even, random
 
 ### Examples
 
-![alt text](../blob/master/media/example1.png "Rule 73")
+![Rule 73](media/example1.png "Rule 73")
 The `ecaterm` application draws simulations right to the terminal. Because we specified live borders, the rightmost cell of every generation will act as if there is a live cell to its right, and likewise the leftmost cell of every generation will act as if there is a live cell to its left. We also asked for 20 live cells in the initial configuration, which were positioned chaotically.
 
-![alt text](../blob/master/media/example2.png "Rule 110 - Turing complete!")
+![Rule 110](media/example2.png "Rule 110 - Turing complete!")
 The `ecavisual` application draws simulations in SDL. Press the spacebar to iterate the simulation by a single time step. Because we asked for even spacing, the simulator will attempt to center and evenly space out the cells of the initial generation as much as possible. For best spacing, use live cell requirements and habitat widths that create reduceable ratios, like 20/100. Ratios such as 37/80 will result in a large clump of cells centered in the initial generation.
 
-![alt text](../blob/master/media/example3.png "Rule 117")
+![Rule 117](media/example3.png "Rule 117")
 
-![alt text](../blob/master/media/example4.png "Rule 105")
+![Role 105](media/example4.png "Rule 105")
 
 *Note: The window size and colors used in `ecavisual` simulations are determined by constants inside `ecavisual.c`. The window size has been increased for these screenshots. If you attempt to create a simulation that will not fit inside the window, the program will manually resize the simulation. `ecavisual` has to store all of the `SDL_Rect`s that make up its drawings, and this takes up __a lot of memory__!*
 
