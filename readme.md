@@ -24,7 +24,7 @@ Use the included `Makefile` to build the two applications.
 + `make`: Build both applications.
 + `make ecaterm`, `make ecavisual`: Build specific application.
 + `make test`: Do a test run with `ecaterm`. A successful test looks like this:
-![image](../media/successful-test.png "Successful test")
+![alt text](media/successful-test.png "Successful test")
 + `make clean`: Remove all object files created during the compilation process.
 + `make purge`: Deconstruct the project; remove all object files and executable files.
 
@@ -54,13 +54,13 @@ spacing:           even, random
 
 ### Examples
 
-![image](../media/example1.png "Rule 73")
+![alt text](media/example1.png "Rule 73")
 
-![image](../media/example2.png "Rule 110 - Turing complete!")
+![alt text](media/example2.png "Rule 110 - Turing complete!")
 
-![image](../media/example3.png "Rule 117")
+![alt text](media/example3.png "Rule 117")
 
-![image](../media/example4.png "Rule 105")
+![alt text](media/example4.png "Rule 105")
 
 
 
@@ -70,8 +70,9 @@ The following is a brief documentation of the public methods in each of this rep
 
 ### eca.c
 
+**createSim()**
 ```c
-Simulation\* createSim(int rule, int habitatSize, int genBufferSize, BoundaryCode borderType, ConfigCode initCode)
+Simulation* createSim(int rule, int habitatSize, int genBufferSize, BoundaryCode borderType, ConfigCode initCode)
 ```
 Given a rule from Wolfram's numbering scheme, a number of cells belonging to a 
 single generation, a number of generations to store on memory, a method of
@@ -79,6 +80,7 @@ interpreting the neighborhoods of edge cells, and a code specifying how the
 initial generation should be populated, build a simulation according to these
 attributes and return a pointer to it.
 
+**getCellState()**
 ```c
 bool getCellState(CellBlock* intlBlockPtr, int cellIndex)
 ```
@@ -87,6 +89,7 @@ block and its index relative to that entire generation. Return a boolean
 representing the cell's state; live cells return true and dead cells return
 false.
 
+**iterateSim()**
 ```c
 void iterateSim(Simulation* simPtr, int iterations)
 ```
@@ -94,6 +97,7 @@ Knowing the latest states of each cell in a simulation, calculate their next
 state. Place the resulting new generation in the buffer, deleting the oldest
 generation in the buffer if necassary in order to make room.
    
+**destroySim()**
 ```c
 void destroySim(Simulation* simPtr)
 ```
