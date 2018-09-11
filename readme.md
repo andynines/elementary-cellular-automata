@@ -24,7 +24,7 @@ Use the included `Makefile` to build the two applications.
 + `make`: Build both applications.
 + `make ecaterm`, `make ecavisual`: Build specific application.
 + `make test`: Do a test run with `ecaterm`. A successful test looks like this:
-![alt text](../blob/master/media/successful-test.png "Successful test")
+![image](../media/successful-test.png "Successful test")
 + `make clean`: Remove all object files created during the compilation process.
 + `make purge`: Deconstruct the project; remove all object files and executable files.
 
@@ -54,13 +54,13 @@ spacing:           even, random
 
 ### Examples
 
-![alt text](../blob/master/media/example1.png "Rule 73")
+![image](../media/example1.png "Rule 73")
 
-![alt text](../blob/master/media/example2.png "Rule 110 - Turing complete!")
+![image](../media/example2.png "Rule 110 - Turing complete!")
 
-![alt text](../blob/master/media/example3.png "Rule 117")
+![image](../media/example3.png "Rule 117")
 
-![alt text](../blob/master/media/example4.png "Rule 105")
+![image](../media/example4.png "Rule 105")
 
 
 
