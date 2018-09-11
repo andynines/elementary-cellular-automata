@@ -93,7 +93,7 @@ static Simulation* usage(char* execName) {
 Simulation* createUserSim(int argc, char* argv[]) {
     /*
     This method wraps the createSim method in eca.c, reading in an argument 
-    vector and extracting its inforation in order to create a simulation 
+    vector and extracting its information in order to create a simulation 
     specified by a user on the command line. If all arguments are acceptable,
     it passes back the pointer received from the sim creator. Otherwise, it
     displays a usage message.

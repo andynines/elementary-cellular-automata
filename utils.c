@@ -60,7 +60,7 @@ int min(int a, int b) {
 bool wrap(int* n, int nMax) {
     /*
     Given a pointer to an integer and a maximum value for this number, test to
-    see if this number is with the inclusive range between 0 and the specified
+    see if this number is within the inclusive range between 0 and the specified
     maximum. If it is outside this range, wrap the number back into it using
     modulo and return true. Otherwise, return false.
     */

@@ -43,7 +43,7 @@ boundary-type:     wrap, dead, alive
 cells-alive:       integer from 0 to habitat-width
 spacing:           even, random
 ```
-+ **Rule**: A number in the range from 0 to 255 in Wolfram's numbering scheme. Determines Determines the state of a cell during the next time step based on the states of itself and its two immediate neighbors.
++ **Rule**: A number in the range from 0 to 255 in Wolfram's numbering scheme. Determines the state of a cell during the next time step based on the states of itself and its two immediate neighbors.
 + **Habitat width**: The number of cell spaces available in a single generation.
 + **Buffer height**: The maximum number of generations stored in memory at a given time.
 + **Boundary type**: Determines how the leftmost and rightmost cells in a generation react to their left and right neighbors, respectively. For instance, when this option is set to "dead," the leftmost cell will behave as if there is a dead cell to its left. If instead set to "wrap," the leftmost and rightmost cells will see each other as neighbors. Note that at the first instant during which a wrap occurs, the design:
@@ -51,6 +51,10 @@ spacing:           even, random
     2. Is no longer a representation of what the design would look like if it was being simulated in an infinitely wide space.
 + **Cells alive**: The number of cells in the initial generation that will be alive.
 + **Spacing**: How the alive cells of the initial generation are spaced. If set to even, the alive cells will have an even distance between them and be centered as much as possible. This option works best when *cells alive* and *habitat width* create a reduceable ratio. If set to "random," the spacing will instead be chaotic.
+
+Use the spacebar to iterate an `ecavisual` simulation.
+
+**Warning**: `ecavisual` simulations take up a lot of memory! Avoid creating larger simulations (like the ones seen in "examples") unless you know that your machine can handle it.
 
 ### Examples
 
@@ -66,7 +70,7 @@ spacing:           even, random
 
 ## Documentation
 
-The following is a brief documentation of the public methods in each of this repository's libraries.
+The following is a brief documentation of the public methods in each of this repository's libraries, even though literally no one is ever going to use any of them.
 
 ### eca.h
 
@@ -113,7 +117,7 @@ Methods for reading in arguments that specify different attributes of a simulati
 ```c
 Simulation* createUserSim(int argc, char* argv[])
 ```
-This method wraps the createSim method in eca.c, reading in an argument vector and extracting its inforation in order to create a simulation specified by a user on the command line. If all arguments are acceptable, it passes back the pointer received from the sim creator. Otherwise, it displays a usage message.
+This method wraps the createSim method in eca.c, reading in an argument vector and extracting its information in order to create a simulation specified by a user on the command line. If all arguments are acceptable, it passes back the pointer received from the sim creator. Otherwise, it displays a usage message.
 
 **infoStr()**
 ```c
@@ -192,7 +196,7 @@ Given two integer arguments, return back the smaller of those two values.
 ```c
 bool wrap(int* n, int nMax)
 ```
-Given a pointer to an integer and a maximum value for this number, test to see if this number is with the inclusive range between 0 and the specified maximum. If it is outside this range, wrap the number back into it using modulo and return true. Otherwise, return false.
+Given a pointer to an integer and a maximum value for this number, test to see if this number is within the inclusive range between 0 and the specified maximum. If it is outside this range, wrap the number back into it using modulo and return true. Otherwise, return false.
 
 
 
