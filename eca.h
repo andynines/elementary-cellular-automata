@@ -12,6 +12,7 @@ MIT License
 
 // Includes
 
+#include <limits.h>
 #include <stdbool.h>
 
 
@@ -19,7 +20,7 @@ MIT License
 // Constants
 
 #define BLOCK_BYTES (sizeof(CellBlock))
-#define BLOCK_BITS (BLOCK_BYTES * 8)
+#define BLOCK_BITS (BLOCK_BYTES * CHAR_BIT)
 
 
 

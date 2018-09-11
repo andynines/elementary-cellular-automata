@@ -1,31 +1,30 @@
 # Elementary Cellular Automata
 
-This repository consists of libraries making up an elementary cellular automaton simulation engine, and applications that allow you to explore these automata. Read more about them on [Wikipedia](https://en.wikipedia.org/wiki/Elementary_cellular_automaton "Go to Wikipedia.com").
+
+
+This project simulates and creates visual representations of the elementary cellular automata. Read more about these cellular automata on [Wikipedia](https://en.wikipedia.org/wiki/Elementary_cellular_automaton "Go to Wikipedia.com").
 
 
 
 ## License
 
-The contents of this repository are made available under the [MIT License](../blob/master/license.txt "Go to full license text").
+The contents of this repository are made available under the [MIT License](../license.txt "Go to full license text").
 
 
 
 ## Dependencies
 
-The `ecavisual` application requires SDL2. On Debian-like systems, this can be installed using the command:
-```
-sudo apt install libsdl2-2.0-0
-```
+The `ecavisual` application requires SDL2. All other dependencies are part of the C standard library.
 
 
 
 ## Compilation
 
-Use the included `Makefile` to build the two included applications.
-+ `make`, `make all`: Build both applications.
+Use the included `Makefile` to build the two applications.
++ `make`: Build both applications.
 + `make ecaterm`, `make ecavisual`: Build specific application.
 + `make test`: Do a test run with `ecaterm`. A successful test looks like this:
-![Successful test](media/successful-test.png "Successful test")
+![image](../blob/master/media/successful-test.png "Successful test")
 + `make clean`: Remove all object files created during the compilation process.
 + `make purge`: Deconstruct the project; remove all object files and executable files.
 
@@ -46,25 +45,64 @@ boundary-type:     wrap, dead, alive
 cells-alive:       integer from 0 to habitat-width
 spacing:           even, random
 ```
++ **Rule**: A number in the range from 0 to 255 in Wolfram's numbering scheme. Determines Determines the state of a cell during the next time step based on the states of itself and its two immediate neighbors.
++ **Habitat width**: The number of cell spaces available in a single generation.
++ **Buffer height**: The maximum number of generations stored in memory at a given time.
++ **Boundary type**: Determines how the leftmost and rightmost cells in a generation react to their left and right neighbors, respectively. For instance, when this option is set to "dead," the leftmost cell will behave as if there is a dead cell to its left. "Wrap" is, however, the most natural option. This is because the elementary cellular automata would ideally be simulated in an infinitely wide habitat. During the first instant that an automaton wraps, the design it creates will become unnaturally periodic. (*However, this period could still be very long.*)
++ **Cells alive**: The number of cells in the initial generation that will be alive.
++ **Spacing**: How the alive cells of the initial generation are spaced. If set to even, the alive cells will have an even distance between them and be centered as much as possible. This option works best when *cells alive* and *habitat width* create a reduceable ratio. If set to "random," the spacing will instead be chaotic.
 
 ### Examples
 
-![Rule 73](media/example1.png "Rule 73")
-The `ecaterm` application draws simulations right to the terminal. Because we specified live borders, the rightmost cell of every generation will act as if there is a live cell to its right, and likewise the leftmost cell of every generation will act as if there is a live cell to its left. We also asked for 20 live cells in the initial configuration, which were positioned chaotically.
+![image](../blob/master/media/example1.png "Rule 73")
 
-![Rule 110](media/example2.png "Rule 110 - Turing complete!")
-The `ecavisual` application draws simulations in SDL. Press the spacebar to iterate the simulation by a single time step. Because we asked for even spacing, the simulator will attempt to center and evenly space out the cells of the initial generation as much as possible. For best spacing, use live cell requirements and habitat widths that create reduceable ratios, like 20/100. Ratios such as 37/80 will result in a large clump of cells centered in the initial generation.
+![image](../blob/master/media/example2.png "Rule 110 - Turing complete!")
 
-![Rule 117](media/example3.png "Rule 117")
+![image](../blob/master/media/example3.png "Rule 117")
 
-![Role 105](media/example4.png "Rule 105")
+![image](../blob/master/media/example4.png "Rule 105")
 
-*Note: The window size and colors used in `ecavisual` simulations are determined by constants inside `ecavisual.c`. The window size has been increased for these screenshots. If you attempt to create a simulation that will not fit inside the window, the program will manually resize the simulation. `ecavisual` has to store all of the `SDL_Rect`s that make up its drawings, and this takes up __a lot of memory__!*
+
+
+## Documentation
+
+The following is a brief documentation of the public methods in each of this repository's libraries.
+
+### eca.c
+
+```c
+Simulation\* createSim(int rule, int habitatSize, int genBufferSize, BoundaryCode borderType, ConfigCode initCode)
+```
+Given a rule from Wolfram's numbering scheme, a number of cells belonging to a 
+single generation, a number of generations to store on memory, a method of
+interpreting the neighborhoods of edge cells, and a code specifying how the
+initial generation should be populated, build a simulation according to these
+attributes and return a pointer to it.
+
+```c
+bool getCellState(CellBlock* intlBlockPtr, int cellIndex)
+```
+Locate a particular cell bit based off of a pointer to its generation's memory
+block and its index relative to that entire generation. Return a boolean
+representing the cell's state; live cells return true and dead cells return
+false.
+
+```c
+void iterateSim(Simulation* simPtr, int iterations)
+```
+Knowing the latest states of each cell in a simulation, calculate their next
+state. Place the resulting new generation in the buffer, deleting the oldest
+generation in the buffer if necassary in order to make room.
+   
+```c
+void destroySim(Simulation* simPtr)
+```
+Remove a simulation's data from memory using its pointer.
 
 
 
 ## Todo
 
 + `ecavisual` is currently a hulking mess in terms of its code and memory consumption. Look into ways to improve this.
-+ Document all of the public methods of each library in this readme.
-+ Look into procedural music generation; start working on new `ecatunes` app.
++ Finish the documentation.
++ Organize the source code into folders and spiffy up the Makefile.
