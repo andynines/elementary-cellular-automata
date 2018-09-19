@@ -35,8 +35,6 @@ MIT License
 #define CELL_B (0x0)
 #define CELL_A (0xFF)
 
-#define ITERATION_DELAY (2)
-
 
 
 // Data structures
