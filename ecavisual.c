@@ -60,7 +60,6 @@ typedef struct {
 
 typedef struct {
     bool active;
-    bool bufferFilled;
     SDL_Window* windowPtr;
     SDL_Renderer* rendererPtr;
     SDL_Event event;
@@ -161,23 +160,6 @@ void destroyRow(App* appPtr, int rowIndex) {
     }
 
     appPtr->drawingPtr->rowArr[rowIndex].intlNodePtr = (RectNode*) 0;
-}
-
-
-
-int countRects(App* appPtr, int rowIndex) {
-    // DEBUG METHOD: Return number of live cells in row
-    int count;
-    RectNode* currentNodePtr;
-    
-    count = 0;
-    currentNodePtr = appPtr->drawingPtr->rowArr[rowIndex].intlNodePtr;
-    while (currentNodePtr != (RectNode*) 0) {
-        ++count;
-        currentNodePtr = currentNodePtr->nextNodePtr;
-    }
-    
-    return count;
 }
 
 
@@ -370,29 +352,6 @@ void draw(App* appPtr) {
     }
 
     SDL_RenderPresent(appPtr->rendererPtr);
-}
-
-
-
-void cliDraw(App* appPtr) {
-    // DEBUG METHOD: Print text representation of drawing struct to stdout
-    int rowIndex;
-    RectNode* currentNodePtr;
-    int prevColIndex;
-    int colIndex;
-    
-    for (rowIndex = 0; rowIndex < (appPtr->simPtr->genBufferSize); ++rowIndex) {
-        currentNodePtr = appPtr->drawingPtr->rowArr[rowIndex].intlNodePtr;
-        prevColIndex = 0;
-        while (currentNodePtr != (RectNode*) 0) {
-            for (colIndex = prevColIndex; colIndex < (currentNodePtr->colIndex); ++colIndex) putchar('-');
-            putchar('0');
-            prevColIndex = (currentNodePtr->colIndex) + 1;
-            currentNodePtr = currentNodePtr->nextNodePtr;
-        }
-        putchar('\n');
-    }
-    putchar('\n');
 }
 
 
